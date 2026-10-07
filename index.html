@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Yuan Bo · Oldcircle</title>
-<meta name="description" content="Yuan Bo (Oldcircle) builds AI agents that show their work: agent skills like geo-sleuth and Holmes, developer tools, an AACL 2026 paper, iOS apps and browser games.">
+<meta name="description" content="Yuan Bo (Oldcircle) builds AI agents that show their work: agent skills like geo-sleuth and Holmes, developer tools, an AACL 2026 paper and browser games.">
 <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -13,7 +13,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://oldcircle.github.io/">
 <meta property="og:title" content="Yuan Bo · Oldcircle">
-<meta property="og:description" content="AI agents that show their work: geo-sleuth, Holmes, Trellis, an AACL 2026 paper, iOS apps and browser games.">
+<meta property="og:description" content="AI agents that show their work: geo-sleuth, Holmes, Trellis, an AACL 2026 paper and browser games.">
 <meta property="og:image" content="https://oldcircle.github.io/assets/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preload" href="assets/fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -145,7 +145,7 @@
   :root[data-lang="zh"] h1 em { font-style: normal; }
   .lede { font-size: 18px; line-height: 1.7; color: var(--ink-2); max-width: 36em; margin: 0 0 14px; text-wrap: pretty; }
   .affil { font-size: 14px; color: var(--ink-3); margin: 0 0 34px; }
-  .facts { list-style: none; margin: 0 0 34px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .facts { list-style: none; margin: 0 0 34px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
   .facts li { padding: 14px 16px 14px 0; font-size: 13px; line-height: 1.45; color: var(--ink-3); }
   .facts li + li { padding-left: 16px; border-left: 1px solid var(--rule); }
   .facts b { display: block; font: 400 30px/1.1 var(--serif); color: var(--ink); margin-bottom: 4px; letter-spacing: -0.01em; }
@@ -377,9 +377,6 @@
     .hero { padding: 48px 0 64px; }
     .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 8px; }
     .hero-mark { order: -1; width: 168px; justify-self: start; margin-bottom: 18px; }
-    .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .facts li:nth-child(3) { padding-left: 0; border-left: 0; }
-    .facts li:nth-child(n+3) { border-top: 1px solid var(--rule); }
     .feature, .feature-game { grid-template-columns: minmax(0, 1fr); }
     .feature.flip .f-media { order: 0; }
     .f-media, .feature.flip .f-media { border-right: 0; border-left: 0; border-bottom: 1px solid var(--rule); }
@@ -486,13 +483,12 @@
           <span lang="en">I build AI agents that <em>show their work</em>.</span>
           <span lang="zh">我做 AI agent，<br><em>让每个结论都有据可查</em>。</span>
         </h1>
-        <p class="lede" lang="en">Agent skills, developer tools, a research paper and a few iOS apps. The ones I like best refuse to guess: a claim has to name the file it came from, observations are sealed before any reasoning starts, and every number is run before it goes on the page.</p>
-        <p class="lede" lang="zh">写 agent skill 和开发者工具，发过一篇论文，也上架了几款 iOS 应用。我最满意的几个项目都不靠猜：结论要说明出自哪个文件，观察先封存、再推理，写到页面上的数字都先实际跑过一遍。</p>
+        <p class="lede" lang="en">Agent skills, developer tools, a research paper and some browser games. The ones I like best refuse to guess: a claim has to name the file it came from, observations are sealed before any reasoning starts, and every number is run before it goes on the page.</p>
+        <p class="lede" lang="zh">写 agent skill 和开发者工具，发过一篇论文，也做了些网页小游戏。我最满意的几个项目都不靠猜：结论要说明出自哪个文件，观察先封存、再推理，写到页面上的数字都先实际跑过一遍。</p>
         <p class="affil"><span lang="en">AI master's student at Harbin Institute of Technology, Shenzhen.</span><span lang="zh">哈尔滨工业大学（深圳）人工智能方向硕士在读。</span></p>
         <ul class="facts">
           <li><b data-stars="geo-sleuth">188</b><span lang="en">GitHub stars on geo-sleuth</span><span lang="zh">geo-sleuth 的 GitHub 星标</span></li>
           <li><b>AACL</b><span lang="en">2026 main-conference paper</span><span lang="zh">2026 主会论文</span></li>
-          <li><b>5</b><span lang="en">iOS apps on the App Store</span><span lang="zh">款 iOS 应用已上架</span></li>
           <li><b>20+</b><span lang="en">games that run in a browser</span><span lang="zh">个网页小游戏</span></li>
         </ul>
         <div class="cta">
@@ -883,7 +879,6 @@
     <nav class="foot-links" aria-label="Elsewhere">
       <a href="https://github.com/Oldcircle">GitHub</a>
       <a href="https://arxiv.org/abs/2603.20017">arXiv</a>
-      <a href="https://apps.apple.com/developer/id1873213157">App Store</a>
     </nav>
     <p class="fine"><span lang="en">© 2026 Yuan Bo. Hand-written HTML, no framework.</span><span lang="zh">© 2026 袁博。手写 HTML，没用框架。</span></p>
   </div>
