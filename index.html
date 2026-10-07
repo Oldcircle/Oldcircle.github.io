@@ -1,364 +1,1001 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yuan Bo — Builder & Vibe Coder</title>
-  <style>
-    :root {
-      --bg: #fafafa;
-      --text: #1a1a1a;
-      --muted: #666;
-      --accent: #2563eb;
-      --border: #e5e5e5;
-      --card-bg: #fff;
-      --tag-bg: #f0f0f0;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yuan Bo · Oldcircle</title>
+<meta name="description" content="Yuan Bo (Oldcircle) builds AI agents that show their work: agent skills like geo-sleuth and Holmes, developer tools, an AACL 2026 paper, iOS apps and browser games.">
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121110" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="canonical" href="https://oldcircle.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://oldcircle.github.io/">
+<meta property="og:title" content="Yuan Bo · Oldcircle">
+<meta property="og:description" content="AI agents that show their work: geo-sleuth, Holmes, Trellis, an AACL 2026 paper, iOS apps and browser games.">
+<meta property="og:image" content="https://oldcircle.github.io/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="assets/fonts/instrument-serif-400.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+  (function () {
+    var d = document.documentElement, lang, theme;
+    try { lang = localStorage.getItem("lang"); theme = localStorage.getItem("theme"); } catch (e) {}
+    var q = /[?&]lang=(en|zh)\b/.exec(location.search);
+    if (q) { lang = q[1]; try { localStorage.setItem("lang", lang); } catch (e) {} }
+    if (lang !== "en" && lang !== "zh") lang = /^zh\b/i.test(navigator.language || "") ? "zh" : "en";
+    d.setAttribute("data-lang", lang);
+    d.lang = lang === "zh" ? "zh-CN" : "en";
+    if (theme === "light" || theme === "dark") d.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+  @font-face { font-family: "Instrument Serif"; src: url(assets/fonts/instrument-serif-400.woff2) format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+  @font-face { font-family: "Instrument Serif"; src: url(assets/fonts/instrument-serif-400-italic.woff2) format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
+  @font-face { font-family: "JetBrains Mono"; src: url(assets/fonts/jetbrains-mono-400.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+  @font-face { font-family: "JetBrains Mono"; src: url(assets/fonts/jetbrains-mono-500.woff2) format("woff2"); font-weight: 500; font-display: swap; }
+  @font-face { font-family: "Noto Serif SC Display"; src: url(assets/fonts/noto-serif-sc-display.woff2) format("woff2"); font-weight: 400 900; font-display: swap; }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #111;
-        --text: #e5e5e5;
-        --muted: #999;
-        --accent: #60a5fa;
-        --border: #2a2a2a;
-        --card-bg: #1a1a1a;
-        --tag-bg: #2a2a2a;
-      }
-    }
+  :root {
+    --serif: "Instrument Serif", "Noto Serif SC Display", "Songti SC", "STSong", serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "PingFang SC", "Microsoft YaHei", monospace;
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
+    --bg: #f4f1ea;
+    --bg-soft: #ece8de;
+    --card: #fbfaf6;
+    --ink: #1a1814;
+    --ink-2: #4a463e;
+    --ink-3: #7b766b;
+    --rule: #ddd7ca;
+    --rule-strong: #c9c1b0;
+    --accent: #c0412c;
+    --accent-soft: rgba(192, 65, 44, 0.09);
+    --ok: #3d7a4c;
+    --dot: rgba(26, 24, 20, 0.07);
+    --term-bg: #1c1b18;
+    --term-ink: #e8e4d9;
+    --term-dim: #8e897c;
+    --shadow: 0 1px 0 rgba(26, 24, 20, 0.04), 0 8px 24px -12px rgba(26, 24, 20, 0.18);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121110; --bg-soft: #191816; --card: #1a1917; --ink: #ece8de; --ink-2: #bcb6a8; --ink-3: #8a8477;
+      --rule: #2b2a26; --rule-strong: #3b3934; --accent: #e3674f; --accent-soft: rgba(227, 103, 79, 0.12); --ok: #7cc28f;
+      --dot: rgba(236, 232, 222, 0.06); --term-bg: #0d0d0c; --term-ink: #e8e4d9; --term-dim: #7f7a6e;
+      --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 10px 30px -14px rgba(0, 0, 0, 0.7);
+      color-scheme: dark;
     }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121110; --bg-soft: #191816; --card: #1a1917; --ink: #ece8de; --ink-2: #bcb6a8; --ink-3: #8a8477;
+    --rule: #2b2a26; --rule-strong: #3b3934; --accent: #e3674f; --accent-soft: rgba(227, 103, 79, 0.12); --ok: #7cc28f;
+    --dot: rgba(236, 232, 222, 0.06); --term-bg: #0d0d0c; --term-ink: #e8e4d9; --term-dim: #7f7a6e;
+    --shadow: 0 1px 0 rgba(0, 0, 0, 0.3), 0 10px 30px -14px rgba(0, 0, 0, 0.7);
+    color-scheme: dark;
+  }
 
-    .container {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 80px 24px 120px;
-    }
+  /* one language at a time */
+  :root[data-lang="en"] [lang="zh"], :root[data-lang="zh"] [lang="en"] { display: none !important; }
 
-    /* Header */
-    .header {
-      margin-bottom: 56px;
-    }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 72px; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.65 var(--sans); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  img, video, svg { display: block; max-width: 100%; }
+  a { color: inherit; }
+  code, kbd, pre { font-family: var(--mono); }
+  ::selection { background: var(--accent); color: #fff; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 
-    .header h1 {
-      font-size: 32px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      margin-bottom: 8px;
-    }
+  .wrap { width: 100%; max-width: 1140px; margin: 0 auto; padding: 0 32px; }
+  .mono { font-family: var(--mono); }
+  .kicker {
+    font: 500 11.5px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3);
+    margin: 0 0 10px;
+  }
+  :root[data-lang="zh"] .kicker { letter-spacing: 0.04em; }
+  .defs { position: absolute; width: 0; height: 0; overflow: hidden; }
 
-    .header .tagline {
-      font-size: 18px;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
+  /* ---------- top bar ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--bg) 86%, transparent);
+    -webkit-backdrop-filter: saturate(1.4) blur(12px); backdrop-filter: saturate(1.4) blur(12px);
+    border-bottom: 1px solid transparent; transition: border-color .2s;
+  }
+  .topbar.scrolled { border-bottom-color: var(--rule); }
+  .topbar-in { display: flex; align-items: center; gap: 28px; height: 60px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 400 22px/1 var(--serif); letter-spacing: -0.01em; }
+  .brand svg { width: 28px; height: 28px; color: var(--ink); }
+  .nav { display: flex; gap: 22px; margin-left: auto; }
+  .nav a { text-decoration: none; font-size: 14px; color: var(--ink-2); transition: color .15s; }
+  .nav a:hover { color: var(--ink); }
+  .toggles { display: flex; align-items: center; gap: 6px; }
+  .icon-btn {
+    display: inline-flex; align-items: center; justify-content: center; height: 34px; min-width: 34px; padding: 0 10px;
+    border: 1px solid var(--rule); border-radius: 999px; background: transparent; color: var(--ink-2);
+    font: 500 13px/1 var(--sans); cursor: pointer; text-decoration: none; transition: border-color .15s, color .15s, background .15s;
+  }
+  .icon-btn:hover { color: var(--ink); border-color: var(--rule-strong); background: var(--card); }
+  .icon-btn svg { width: 16px; height: 16px; }
+  .theme-btn .moon { display: none; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .theme-btn .sun { display: none; } :root:not([data-theme="light"]) .theme-btn .moon { display: block; } }
+  :root[data-theme="dark"] .theme-btn .sun { display: none; }
+  :root[data-theme="dark"] .theme-btn .moon { display: block; }
 
-    .social-links {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
+  /* ---------- hero ---------- */
+  .hero { position: relative; padding: 72px 0 84px; overflow: hidden; }
+  .hero::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background-image: radial-gradient(var(--dot) 1px, transparent 1.4px); background-size: 22px 22px;
+    -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent); mask-image: linear-gradient(to bottom, #000 40%, transparent);
+  }
+  .hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+  .eyebrow { display: flex; align-items: center; gap: 10px; font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 26px; }
+  .eyebrow::before { content: ""; width: 26px; height: 1px; background: var(--accent); }
+  h1 {
+    font: 400 clamp(44px, 6.4vw, 80px)/1.0 var(--serif); letter-spacing: -0.015em; margin: 0 0 28px; text-wrap: balance;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  :root[data-lang="zh"] h1 { font-size: clamp(30px, 4.4vw, 54px); line-height: 1.18; letter-spacing: 0; font-weight: 600; }
+  :root[data-lang="zh"] h1 em { font-style: normal; }
+  .lede { font-size: 18px; line-height: 1.7; color: var(--ink-2); max-width: 36em; margin: 0 0 14px; text-wrap: pretty; }
+  .affil { font-size: 14px; color: var(--ink-3); margin: 0 0 34px; }
+  .facts { list-style: none; margin: 0 0 34px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+  .facts li { padding: 14px 16px 14px 0; font-size: 13px; line-height: 1.45; color: var(--ink-3); }
+  .facts li + li { padding-left: 16px; border-left: 1px solid var(--rule); }
+  .facts b { display: block; font: 400 30px/1.1 var(--serif); color: var(--ink); margin-bottom: 4px; letter-spacing: -0.01em; }
+  .cta { display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 18px; border-radius: 999px;
+    font: 500 14.5px/1 var(--sans); text-decoration: none; border: 1px solid var(--rule-strong); color: var(--ink); background: var(--card);
+    transition: transform .15s, border-color .15s, background .15s;
+  }
+  .btn:hover { transform: translateY(-1px); border-color: var(--ink-3); }
+  .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .btn svg { width: 16px; height: 16px; }
 
-    .social-links a {
-      color: var(--muted);
-      text-decoration: none;
-      font-size: 14px;
-      transition: color 0.2s;
-    }
+  .hero-mark { position: relative; margin: 0; justify-self: center; width: min(100%, 400px); aspect-ratio: 1; color: var(--ink); }
+  .hero-mark .enso-big { width: 100%; height: 100%; }
+  .spine { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.9s cubic-bezier(.55, .08, .32, 1) .25s forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .hero-mark .seal { position: absolute; width: 17%; right: 4%; bottom: 7%; color: var(--accent); opacity: 0; transform: scale(1.35) rotate(-4deg); animation: stamp .35s cubic-bezier(.3, 1.6, .5, 1) 1.95s forwards; }
+  @keyframes stamp { to { opacity: 1; transform: scale(1) rotate(-4deg); } }
 
-    .social-links a:hover {
-      color: var(--accent);
-    }
+  /* ---------- sections ---------- */
+  section.block { padding: 88px 0; border-top: 1px solid var(--rule); }
+  .sec-head { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 0 20px; margin-bottom: 44px; }
+  .sec-num { font: 500 12px/1 var(--mono); color: var(--accent); padding-top: 14px; margin: 0; letter-spacing: 0.06em; }
+  h2 { font: 400 clamp(34px, 4.2vw, 50px)/1.05 var(--serif); letter-spacing: -0.012em; margin: 0; }
+  :root[data-lang="zh"] h2 { font-size: clamp(28px, 3.4vw, 40px); font-weight: 600; letter-spacing: 0; line-height: 1.2; }
+  .sec-sub { grid-column: 2; margin: 12px 0 0; color: var(--ink-3); font-size: 16px; max-width: 42em; }
+  h3 { font: 400 32px/1.1 var(--serif); letter-spacing: -0.01em; margin: 0 0 12px; }
+  :root[data-lang="zh"] h3 { font-weight: 600; font-size: 28px; letter-spacing: 0; }
+  h3 .alt { font-size: 0.72em; color: var(--ink-3); margin-left: 8px; font-weight: 400; }
+  .desc { color: var(--ink-2); margin: 0 0 18px; text-wrap: pretty; }
 
-    /* Sections */
-    section {
-      margin-bottom: 48px;
-    }
+  .card { background: var(--card); border: 1px solid var(--rule); border-radius: 16px; box-shadow: var(--shadow); }
+  a.card { display: block; text-decoration: none; transition: transform .2s, border-color .2s; }
+  a.card:hover { transform: translateY(-3px); border-color: var(--rule-strong); }
+  .more { display: inline-flex; align-items: center; gap: 6px; font: 500 14px/1 var(--sans); color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule-strong); padding-bottom: 4px; }
+  .more:hover { border-color: var(--accent); color: var(--accent); }
+  .links { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 22px; }
+  .stars { display: inline-flex; align-items: center; gap: 6px; font: 500 13px/1 var(--mono); color: var(--ink-2); padding: 6px 10px; border: 1px solid var(--rule); border-radius: 999px; }
+  .stars svg { width: 13px; height: 13px; color: #d4a017; }
+  [data-stars-wrap][hidden] { display: none !important; }
 
-    section h2 {
-      font-size: 14px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
+  /* ---------- features ---------- */
+  .feature { display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(0, 1fr); overflow: hidden; }
+  .feature + .feature { margin-top: 28px; }
+  .feature.flip .f-media { order: 2; border-left: 1px solid var(--rule); border-right: 0; }
+  .f-media { background: #0f1114; border-right: 1px solid var(--rule); display: flex; flex-direction: column; }
+  .f-body { padding: 38px 40px 36px; display: flex; flex-direction: column; }
+  .f-body .desc { font-size: 16.5px; }
 
-    /* Project cards */
-    .project {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-      text-decoration: none;
-      color: var(--text);
-      transition: opacity 0.2s;
-    }
+  .stepper { display: flex; flex-direction: column; flex: 1; }
+  .stage { position: relative; aspect-ratio: 3 / 2; background: #0c0e11; }
+  .stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .5s ease; }
+  .stage img.on { opacity: 1; }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); background: #111317; }
+  .steps button {
+    all: unset; box-sizing: border-box; display: block; width: 100%; cursor: pointer; position: relative;
+    padding: 14px 14px 16px; color: #8e949e; font: 12.5px/1.35 var(--sans); border-top: 1px solid #23262c;
+  }
+  .steps li + li button { border-left: 1px solid #23262c; }
+  .steps button b { display: block; font: 500 11px/1 var(--mono); letter-spacing: .08em; color: #5d636d; margin-bottom: 6px; }
+  .steps button[aria-selected="true"] { color: #eef0f3; background: #16191e; }
+  .steps button[aria-selected="true"] b { color: #f08a4b; }
+  .steps button::after { content: ""; position: absolute; left: 0; top: -1px; height: 2px; width: 0; background: #f08a4b; }
+  .steps button[aria-selected="true"]::after { animation: fill var(--step-ms, 3600ms) linear forwards; }
+  .stepper.paused .steps button::after { animation-play-state: paused; }
+  @keyframes fill { to { width: 100%; } }
+  .steps button:focus-visible { outline-offset: -3px; }
+  .step-caps { flex: 1; display: grid; background: #0f1114; border-top: 1px solid #23262c; }
+  .step-caps p { grid-area: 1 / 1; margin: 0; padding: 16px 20px 18px; font-size: 13.5px; line-height: 1.6; color: #9aa0aa; opacity: 0; visibility: hidden; transition: opacity .4s, visibility .4s; }
+  .step-caps p.on { opacity: 1; visibility: visible; }
+  .step-caps b { color: #eef0f3; font-weight: 600; }
 
-    .project:first-of-type {
-      border-top: 1px solid var(--border);
-    }
+  .funnel { margin: 4px 0 20px; padding: 16px 18px; border: 1px solid var(--rule); border-radius: 12px; background: var(--bg); }
+  .funnel .nums { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font: 400 26px/1.15 var(--serif); }
+  .funnel .nums i { font-style: normal; color: var(--ink-3); font-size: 18px; }
+  .funnel .nums .hit { color: var(--accent); }
+  .funnel p { margin: 8px 0 0; font-size: 13.5px; color: var(--ink-3); }
 
-    .project:hover {
-      opacity: 0.7;
-    }
+  .video-box { position: relative; aspect-ratio: 900 / 560; background: #f3eee4; }
+  .video-box video, .video-box img { width: 100%; height: 100%; object-fit: cover; }
+  .f-media.parchment { background: #f3eee4; }
+  .f-media-note { flex: 1; margin: 0; padding: 14px 18px; font-size: 13px; color: #6f6a5f; border-top: 1px solid #e3dccd; background: #efe9dd; }
 
-    .project-name {
-      font-weight: 600;
-      font-size: 16px;
-    }
+  .score { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; margin: 4px 0 20px; border: 1px solid var(--rule); border-radius: 12px; background: var(--bg); overflow: hidden; }
+  .score div { padding: 12px 12px 11px; font-size: 12px; line-height: 1.3; color: var(--ink-3); }
+  .score div + div { border-left: 1px solid var(--rule); }
+  .score b { display: block; font: 400 26px/1.1 var(--serif); color: var(--ink); margin-bottom: 3px; }
+  .score .good b { color: var(--ok); }
+  .score .bad b { color: var(--accent); }
 
-    .project-desc {
-      color: var(--muted);
-      font-size: 14px;
-      margin-left: 8px;
-    }
+  .cmd { display: flex; align-items: center; gap: 10px; background: var(--term-bg); color: var(--term-ink); border-radius: 10px; padding: 6px 6px 6px 16px; font: 13.5px/1.4 var(--mono); }
+  .cmd code { flex: 1; min-width: 0; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+  .cmd code::-webkit-scrollbar { display: none; }
+  .cmd code::before { content: "$ "; color: var(--term-dim); }
+  .copy {
+    flex: none; border: 1px solid #3a3833; background: #26241f; color: #d9d4c7; border-radius: 7px; height: 30px; padding: 0 11px;
+    font: 500 12px/1 var(--sans); cursor: pointer; transition: background .15s;
+  }
+  .copy:hover { background: #33312b; }
+  .works { margin: 12px 0 0; font-size: 12.5px; color: var(--ink-3); }
 
-    .project-meta {
-      font-size: 13px;
-      color: var(--muted);
-      white-space: nowrap;
-      margin-left: 16px;
-    }
+  /* ---------- tool cards ---------- */
+  .bento { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+  .tool.wide { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 36px; align-items: center; }
+  .tool.wide .visual { margin: 0; }
+  .tool.wide .desc { flex: none; }
+  .tool { padding: 26px 26px 24px; display: flex; flex-direction: column; }
+  .tool h3 { font-size: 28px; }
+  :root[data-lang="zh"] .tool h3 { font-size: 24px; }
+  .tool .desc { font-size: 15px; flex: 1; }
+  .visual { margin: 0 0 20px; }
+  .term {
+    margin: 0; padding: 14px 16px; background: var(--term-bg); color: var(--term-ink); border-radius: 10px;
+    font: 11px/1.65 var(--mono); overflow-x: auto; white-space: pre; min-height: 188px;
+  }
+  .term .p { color: var(--term-dim); }
+  .term .f { color: #e8e4d9; font-weight: 500; }
+  .term .w { color: #e0b44c; }
+  .term .e { color: #ef6b5a; }
+  .term .h { color: #8fb996; }
+  .term .c { color: #9ab7e0; }
+  .term .d { color: var(--term-dim); }
+  .rules { border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; background: var(--bg); min-height: 188px; font-size: 12.5px; }
+  .rules div { display: grid; grid-template-columns: 0.9fr 1.1fr; }
+  .rules div + div { border-top: 1px solid var(--rule); }
+  .rules span { padding: 10px 12px; line-height: 1.45; }
+  .rules span:first-child { font-weight: 600; color: var(--ink); border-right: 1px solid var(--rule); }
+  .rules span:last-child { color: var(--ink-3); }
+  .rules .head span { font: 500 10.5px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; background: var(--bg-soft); }
+  .picker { border: 1px solid var(--rule); border-radius: 10px; background: var(--bg); padding: 14px 14px 12px; min-height: 188px; }
+  .picker ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .picker li { display: flex; align-items: center; gap: 7px; font: 12px/1.2 var(--mono); color: var(--ink-3); white-space: nowrap; }
+  .picker li::before { content: ""; flex: none; width: 13px; height: 13px; border: 1.5px solid var(--rule-strong); border-radius: 3px; }
+  .picker li.on { color: var(--ink); }
+  .picker li.on::before { background: var(--ink) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='%23f4f1ea' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/11px no-repeat; border-color: var(--ink); }
+  .picker p { margin: 14px 0 0; padding-top: 10px; border-top: 1px dashed var(--rule-strong); font-size: 12px; color: var(--ink-3); }
+  .picker p kbd { font-size: 11px; border: 1px solid var(--rule-strong); border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; background: var(--card); color: var(--ink-2); }
 
-    .project-left {
-      display: flex;
-      align-items: baseline;
-      min-width: 0;
-    }
+  .also { margin-top: 22px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+  .also a { display: block; padding: 18px 22px; text-decoration: none; }
+  .also h4, .older h4 { margin: 0 0 4px; font: 600 15px/1.3 var(--sans); display: flex; align-items: center; gap: 8px; }
+  .also h4 .arrow, .older h4 .arrow { margin-left: auto; color: var(--ink-3); transition: transform .2s, color .2s; }
+  .also a:hover .arrow, .older a:hover .arrow { transform: translate(2px, -2px); color: var(--accent); }
+  .also p, .older p { margin: 0; font-size: 13.5px; color: var(--ink-3); line-height: 1.5; }
 
-    /* Tags */
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-    }
+  /* ---------- research ---------- */
+  .paper { overflow: hidden; }
+  .paper-fig { display: flex; justify-content: center; background: #fff; padding: 30px 40px; border-bottom: 1px solid var(--rule); }
+  .paper-fig img { width: 100%; max-width: 860px; height: auto; }
+  :root[data-theme="dark"] .paper-fig { background: #e9e7e1; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .paper-fig { background: #e9e7e1; } }
+  .paper-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 48px; padding: 34px 40px 36px; }
+  .venue { display: inline-flex; align-items: center; gap: 8px; font: 500 12px/1 var(--mono); letter-spacing: .04em; color: var(--accent); background: var(--accent-soft); padding: 7px 11px; border-radius: 999px; margin-bottom: 18px; }
+  .paper-body h3 { font-size: 30px; line-height: 1.15; }
+  :root[data-lang="zh"] .paper-body h3 { font-weight: 400; font-size: 28px; }
+  .authors { font-size: 14px; color: var(--ink-2); margin: 0; }
+  .authors small { color: var(--ink-3); }
+  .paper-head .links { margin-top: 18px; }
+  .paper-main .desc { font-size: 16px; }
+  .nums3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); margin: 6px 0 4px; }
+  .nums3 div { padding: 14px 12px 12px 0; font-size: 12.5px; line-height: 1.35; color: var(--ink-3); }
+  .nums3 div + div { padding-left: 14px; border-left: 1px solid var(--rule); }
+  .nums3 b { display: block; font: 400 30px/1.1 var(--serif); color: var(--ink); margin-bottom: 3px; }
 
-    .tag {
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 12px;
-      background: var(--tag-bg);
-      color: var(--muted);
-    }
+  /* ---------- shots (simulations / games) ---------- */
+  .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+  .shot { overflow: hidden; display: flex; flex-direction: column; }
+  .shot .img { aspect-ratio: 16 / 10; background: var(--bg-soft); border-bottom: 1px solid var(--rule); overflow: hidden; }
+  .shot .img img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+  .shot:hover .img img { transform: scale(1.025); }
+  .shot .img.top img { object-position: top; }
+  .shot .body { padding: 22px 24px 22px; display: flex; flex-direction: column; flex: 1; }
+  .shot .body h3 { font-size: 26px; margin-bottom: 8px; }
+  :root[data-lang="zh"] .shot .body h3 { font-size: 23px; }
+  .shot .body .desc { font-size: 15px; margin-bottom: 14px; flex: 1; }
+  .shot .note { font-size: 12.5px; color: var(--ink-3); margin: -6px 0 14px; }
+  .shot .img.termbox { background: var(--term-bg); display: flex; align-items: center; }
+  .shot .img.termbox .term { min-height: 0; width: 100%; padding: 22px 26px; font-size: 12.5px; line-height: 1.8; border-radius: 0; background: transparent; }
 
-    /* Contribution list */
-    .contrib-item {
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-    }
+  .games { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-top: 22px; }
+  .game { overflow: hidden; }
+  .game .img { aspect-ratio: 16 / 10; overflow: hidden; border-bottom: 1px solid var(--rule); background: #111; }
+  .game .img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s cubic-bezier(.2, .7, .2, 1); }
+  .game:hover .img img { transform: scale(1.04); }
+  .game .cap { padding: 12px 14px 13px; }
+  .game h4 { margin: 0 0 2px; font: 600 14.5px/1.3 var(--sans); display: flex; gap: 8px; align-items: center; }
+  .game h4 .play { margin-left: auto; font: 500 11px/1 var(--mono); letter-spacing: .05em; color: var(--accent); opacity: 0; transform: translateX(-4px); transition: opacity .2s, transform .2s; }
+  .game:hover h4 .play, .game:focus-visible h4 .play { opacity: 1; transform: none; }
+  .game p { margin: 0; font-size: 12.5px; color: var(--ink-3); line-height: 1.45; }
+  .feature-game { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); overflow: hidden; }
+  .feature-game .img { overflow: hidden; background: #000; }
+  .feature-game .img img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+  .feature-game:hover .img img { transform: scale(1.02); }
+  .feature-game .f-body { justify-content: center; }
 
-    .contrib-item:first-of-type {
-      border-top: 1px solid var(--border);
-    }
 
-    .contrib-item a {
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 15px;
-    }
+  /* ---------- contributions / older ---------- */
+  .contribs { border-top: 1px solid var(--rule); }
+  .contrib { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr) auto; gap: 20px; align-items: center; padding: 18px 4px; border-bottom: 1px solid var(--rule); text-decoration: none; transition: background .15s; }
+  .contrib:hover { background: var(--card); }
+  .contrib .repo { font: 500 14px/1.3 var(--mono); }
+  .contrib .title { font-size: 14.5px; color: var(--ink-2); }
+  .merged { display: inline-flex; align-items: center; gap: 6px; font: 500 11.5px/1 var(--mono); color: #8250df; background: rgba(130, 80, 223, .1); padding: 6px 10px; border-radius: 999px; white-space: nowrap; }
+  :root[data-theme="dark"] .merged { color: #b392f0; background: rgba(179, 146, 240, .12); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .merged { color: #b392f0; background: rgba(179, 146, 240, .12); } }
+  .older { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px 36px; margin-top: 56px; }
+  .older-title { grid-column: 1 / -1; font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 14px; }
+  .older a { display: block; padding: 14px 0; border-top: 1px solid var(--rule); text-decoration: none; }
 
-    .contrib-item a:hover {
-      color: var(--accent);
-    }
+  /* ---------- footer ---------- */
+  footer { border-top: 1px solid var(--rule); padding: 56px 0 64px; }
+  .foot { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 32px; }
+  .foot .brand svg { width: 34px; height: 34px; }
+  .foot-links { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-left: auto; font-size: 14px; }
+  .foot-links a { color: var(--ink-2); text-decoration: none; }
+  .foot-links a:hover { color: var(--accent); }
+  .fine { width: 100%; margin: 6px 0 0; font-size: 12.5px; color: var(--ink-3); }
 
-    .contrib-detail {
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 2px;
-    }
-
-    /* Footer */
-    .footer {
-      margin-top: 64px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    /* Responsive */
-    @media (max-width: 480px) {
-      .container { padding: 48px 16px 80px; }
-      .header h1 { font-size: 26px; }
-      .project { flex-direction: column; gap: 4px; }
-      .project-meta { margin-left: 0; }
-    }
-  </style>
+  /* ---------- responsive ---------- */
+  @media (max-width: 1060px) {
+    .games { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .games .game:nth-child(n+7) { display: none; }
+  }
+  @media (max-width: 920px) {
+    .wrap { padding: 0 24px; }
+    .nav { display: none; }
+    .toggles { margin-left: auto; }
+    .hero { padding: 48px 0 64px; }
+    .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+    .hero-mark { order: -1; width: 168px; justify-self: start; margin-bottom: 18px; }
+    .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .facts li:nth-child(3) { padding-left: 0; border-left: 0; }
+    .facts li:nth-child(n+3) { border-top: 1px solid var(--rule); }
+    .feature, .feature-game { grid-template-columns: minmax(0, 1fr); }
+    .feature.flip .f-media { order: 0; }
+    .f-media, .feature.flip .f-media { border-right: 0; border-left: 0; border-bottom: 1px solid var(--rule); }
+    .paper-fig { padding: 18px; }
+    .paper-body { grid-template-columns: minmax(0, 1fr); }
+    .bento, .also { grid-template-columns: minmax(0, 1fr); }
+    .tool.wide { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+    .older { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .games { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .games .game:nth-child(n+7) { display: block; }
+    .contrib { grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; }
+    .contrib .title { grid-column: 1; grid-row: 2; }
+    .contrib .merged { grid-column: 2; grid-row: 1 / 3; }
+  }
+  @media (max-width: 640px) {
+    .wrap { padding: 0 16px; }
+    section.block { padding: 64px 0; }
+    .sec-head { grid-template-columns: minmax(0, 1fr); margin-bottom: 30px; }
+    .sec-num { padding: 0 0 12px; }
+    .sec-sub { grid-column: 1; }
+    .grid2 { grid-template-columns: minmax(0, 1fr); }
+    .f-body, .paper-body { padding: 26px 20px 24px; }
+    .tool { padding: 22px 20px 20px; }
+    .lede { font-size: 16.5px; }
+    .facts b { font-size: 26px; }
+    .score { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .score div:nth-child(4) { border-left: 0; }
+    .score div:nth-child(n+4) { border-top: 1px solid var(--rule); }
+    .steps button { padding: 11px 8px 12px; font-size: 11.5px; }
+    .older { grid-template-columns: minmax(0, 1fr); }
+    .games { gap: 12px; }
+    .game .cap { padding: 10px 11px 11px; }
+    .picker ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cmd { font-size: 11px; padding-left: 12px; gap: 6px; }
+    .copy { padding: 0 9px; }
+    .brand { font-size: 20px; }
+    .brand-name { display: none; }
+    .foot .brand-name { display: inline; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .spine { animation: none; stroke-dashoffset: 0; }
+    .hero-mark .seal { animation: none; opacity: 1; transform: rotate(-4deg); }
+    .stage img { transition: none; }
+    .steps button::after { display: none; }
+    a.card:hover, .btn:hover { transform: none; }
+    .shot:hover .img img, .game:hover .img img, .feature-game:hover .img img { transform: none; }
+  }
+</style>
 </head>
-<body>
-  <div class="container">
+<body id="top">
 
-    <header class="header">
-      <h1>Yuan Bo</h1>
-      <p class="tagline">Builder. Made a lot of things — from the Trace App to 50+ open source projects. TypeScript / AI / Games.</p>
-      <div class="social-links">
-        <a href="https://github.com/Oldcircle" target="_blank">GitHub</a>
-      </div>
-    </header>
+<svg class="defs" aria-hidden="true" focusable="false">
+<!-- build:defs -->
+  <symbol id="enso" viewBox="0 0 100 100"><g fill="currentColor"><path d="M32.5,78.0L31.9,80.4L32.0,81.6L32.2,82.6L32.6,83.4L33.0,84.2L33.5,85.0L34.1,85.6L34.7,86.2L35.3,86.7L35.9,87.2L36.6,87.6L37.4,87.9L38.1,88.2L38.8,88.4L39.6,88.7L40.4,88.8L41.1,89.0L41.9,89.2L42.7,89.4L43.5,89.6L44.2,89.7L45.0,89.9L45.8,90.0L46.6,90.1L47.4,90.3L48.2,90.4L49.0,90.5L49.8,90.5L50.6,90.6L51.4,90.6L52.2,90.6L53.0,90.6L53.8,90.6L54.6,90.5L55.4,90.4L56.2,90.3L57.0,90.2L57.8,90.1L58.6,90.0L59.4,89.9L60.2,89.7L61.0,89.6L61.8,89.5L62.6,89.4L63.4,89.2L64.2,89.1L65.0,88.9L65.8,88.7L66.6,88.5L67.4,88.2L68.2,87.9L69.0,87.6L69.7,87.2L70.5,86.9L71.2,86.5L72.0,86.1L72.7,85.7L73.4,85.3L74.2,84.9L74.9,84.4L75.6,84.0L76.2,83.5L76.9,82.9L77.5,82.4L78.1,81.8L78.7,81.2L79.3,80.7L79.9,80.1L80.5,79.5L81.1,78.9L81.7,78.3L82.3,77.7L83.0,77.1L83.6,76.6L84.2,76.0L84.7,75.3L85.3,74.7L85.8,74.0L86.3,73.3L86.7,72.6L87.2,71.8L87.6,71.1L88.0,70.3L88.3,69.6L88.7,68.8L89.0,68.0L89.3,67.2L89.6,66.4L89.9,65.6L90.1,64.8L90.3,64.0L90.5,63.2L90.7,62.3L90.9,61.5L91.0,60.7L91.1,59.9L91.2,59.0L91.3,58.2L91.3,57.4L91.4,56.5L91.5,55.7L91.5,54.9L91.5,54.0L91.5,53.2L91.5,52.4L91.4,51.6L91.4,50.8L91.3,49.9L91.3,49.1L91.2,48.3L91.0,47.5L90.9,46.7L90.7,45.9L90.5,45.1L90.3,44.3L90.1,43.6L89.9,42.8L89.6,42.0L89.4,41.2L89.2,40.5L89.0,39.7L88.7,39.0L88.4,38.2L88.1,37.5L87.8,36.8L87.5,36.0L87.1,35.3L86.8,34.6L86.4,33.9L86.1,33.2L85.7,32.5L85.4,31.8L85.0,31.1L84.6,30.4L84.2,29.7L83.8,29.1L83.4,28.4L83.0,27.8L82.5,27.1L82.0,26.5L81.5,26.0L80.9,25.4L80.4,24.8L79.8,24.3L79.2,23.8L78.6,23.3L78.0,22.8L77.5,22.3L76.9,21.8L76.3,21.3L70.7,27.3L71.2,27.7L71.6,28.2L72.0,28.6L72.4,29.0L72.8,29.5L73.2,30.0L73.6,30.5L73.9,31.0L74.3,31.4L74.6,31.9L75.0,32.4L75.4,32.9L75.8,33.4L76.1,33.8L76.5,34.3L76.9,34.8L77.2,35.3L77.6,35.8L77.9,36.3L78.2,36.9L78.5,37.4L78.8,38.0L79.0,38.5L79.3,39.1L79.5,39.7L79.7,40.3L79.9,40.8L80.1,41.4L80.3,42.0L80.4,42.6L80.6,43.2L80.7,43.8L80.9,44.4L81.0,45.0L81.1,45.6L81.2,46.2L81.3,46.9L81.4,47.5L81.5,48.1L81.6,48.7L81.6,49.3L81.7,50.0L81.7,50.6L81.8,51.2L81.8,51.8L81.8,52.5L81.8,53.1L81.8,53.7L81.8,54.4L81.7,55.0L81.6,55.6L81.6,56.3L81.4,56.9L81.3,57.5L81.1,58.1L80.9,58.7L80.7,59.3L80.5,59.9L80.3,60.5L80.1,61.1L79.8,61.7L79.6,62.3L79.3,62.8L79.1,63.4L78.8,64.0L78.5,64.5L78.2,65.1L77.8,65.6L77.5,66.2L77.1,66.7L76.8,67.2L76.4,67.7L75.9,68.1L75.5,68.6L75.1,69.0L74.6,69.5L74.1,69.9L73.7,70.3L73.2,70.7L72.7,71.1L72.2,71.5L71.8,71.9L71.3,72.2L70.8,72.6L70.3,73.0L69.8,73.3L69.3,73.7L68.8,74.0L68.3,74.3L67.8,74.6L67.2,74.9L66.7,75.2L66.2,75.4L65.6,75.7L65.0,75.9L64.5,76.1L63.9,76.3L63.4,76.5L62.8,76.7L62.3,76.9L61.7,77.1L61.2,77.2L60.6,77.4L60.0,77.6L59.5,77.7L58.9,77.9L58.4,78.0L57.8,78.2L57.2,78.3L56.7,78.4L56.1,78.5L55.5,78.6L55.0,78.7L54.4,78.7L53.8,78.8L53.2,78.8L52.7,78.8L52.1,78.8L51.5,78.8L51.0,78.8L50.4,78.8L49.8,78.8L49.3,78.8L48.7,78.8L48.1,78.8L47.6,78.7L47.0,78.7L46.4,78.6L45.9,78.5L45.3,78.4L44.7,78.3L44.2,78.1L43.6,78.0L43.1,77.8L42.6,77.7L42.0,77.5L41.5,77.3L41.0,77.0L40.5,76.8L39.9,76.6L39.4,76.4L38.9,76.3L38.3,76.1L37.8,75.9L37.2,75.8L36.6,75.7L36.0,75.7L35.2,75.8L34.4,76.1L32.7,77.6Z"/><path d="M74.8,28.2L74.2,27.5L73.5,26.9L72.8,26.2L72.1,25.6L71.3,25.0L70.6,24.4L69.8,23.9L69.1,23.3L68.3,22.8L67.5,22.3L66.7,21.8L65.8,21.4L65.0,20.9L64.2,20.5L63.3,20.1L62.4,19.8L61.6,19.4L60.7,19.1L59.8,18.8L58.9,18.5L58.0,18.2L57.1,18.0L56.2,17.8L55.3,17.6L54.3,17.4L53.4,17.2L52.4,17.1L51.5,17.0L50.6,16.9L49.6,16.9L48.7,16.9L47.7,16.9L46.7,16.9L45.8,17.0L44.8,17.1L43.9,17.2L42.9,17.3L42.0,17.5L41.0,17.7L40.1,17.9L39.2,18.2L38.2,18.5L37.3,18.8L36.4,19.1L35.5,19.5L34.7,19.9L33.8,20.4L33.0,20.9L32.1,21.4L31.3,21.9L30.6,22.5L29.8,23.1L29.0,23.7L28.3,24.4L27.6,25.0L26.9,25.7L26.2,26.4L25.6,27.1L25.0,27.8L24.3,28.5L24.3,28.5L25.0,27.9L25.7,27.2L26.4,26.6L27.2,25.9L27.9,25.3L28.7,24.8L29.5,24.2L30.2,23.7L31.0,23.2L31.9,22.7L32.7,22.3L33.5,21.8L34.4,21.4L35.2,21.1L36.1,20.7L37.0,20.4L37.8,20.1L38.7,19.8L39.6,19.5L40.5,19.3L41.4,19.1L42.3,19.0L43.3,18.8L44.2,18.7L45.1,18.7L46.0,18.6L46.9,18.6L47.8,18.6L48.7,18.6L49.6,18.7L50.5,18.7L51.4,18.9L52.3,19.0L53.2,19.1L54.1,19.3L54.9,19.5L55.8,19.7L56.7,19.9L57.5,20.2L58.3,20.5L59.2,20.8L60.0,21.1L60.8,21.4L61.6,21.8L62.4,22.1L63.2,22.5L64.0,22.9L64.7,23.4L65.5,23.8L66.2,24.3L67.0,24.8L67.7,25.3L68.4,25.8L69.1,26.3L69.7,26.9L70.4,27.4L71.1,28.0L71.9,28.4L72.5,29.1L73.0,29.8Z"/><path d="M75.3,27.8L74.5,27.0L73.6,26.1L72.7,25.3L71.8,24.6L70.9,23.9L69.9,23.2L68.9,22.5L67.9,21.9L66.9,21.3L65.9,20.7L64.8,20.2L63.8,19.7L62.7,19.2L61.6,18.7L60.5,18.3L59.4,18.0L58.2,17.6L57.1,17.3L55.9,17.1L54.8,16.8L53.6,16.6L52.4,16.5L51.3,16.3L50.1,16.3L48.9,16.2L47.7,16.2L46.5,16.3L45.3,16.3L44.1,16.5L42.9,16.6L41.7,16.8L40.5,17.1L39.3,17.4L38.2,17.7L37.0,18.1L35.9,18.6L34.8,19.1L33.7,19.6L32.6,20.2L31.6,20.8L30.5,21.5L29.5,22.2L28.5,22.9L27.6,23.7L26.7,24.5L25.8,25.3L24.9,26.2L24.1,27.1L23.3,28.0L22.5,28.9L21.7,29.9L21.0,30.9L20.3,31.9L19.7,33.0L19.1,34.0L18.5,35.1L17.9,36.2L17.4,37.3L17.0,38.5L16.5,39.6L16.5,39.6L17.0,38.5L17.5,37.4L18.0,36.2L18.6,35.1L19.2,34.1L19.8,33.0L20.5,32.0L21.2,31.0L21.9,30.0L22.6,29.0L23.4,28.1L24.3,27.2L25.1,26.3L26.0,25.5L26.9,24.7L27.8,23.9L28.7,23.1L29.7,22.4L30.7,21.7L31.7,21.1L32.8,20.5L33.8,19.9L34.9,19.4L36.0,18.9L37.2,18.5L38.3,18.1L39.4,17.8L40.6,17.5L41.8,17.2L43.0,17.0L44.1,16.9L45.3,16.8L46.5,16.7L47.7,16.7L48.9,16.7L50.1,16.7L51.2,16.8L52.4,16.9L53.6,17.1L54.7,17.3L55.9,17.5L57.0,17.8L58.1,18.1L59.2,18.5L60.3,18.8L61.4,19.2L62.5,19.7L63.5,20.2L64.6,20.7L65.6,21.2L66.6,21.8L67.6,22.3L68.6,23.0L69.6,23.6L70.5,24.3L71.4,25.0L72.3,25.8L73.2,26.6L74.0,27.4L74.8,28.2Z"/><path d="M77.4,25.9L76.3,24.9L75.2,23.8L74.0,22.9L72.8,21.9L71.6,21.1L70.4,20.2L69.1,19.5L67.8,18.7L66.4,18.1L65.1,17.4L63.7,16.9L62.3,16.3L60.9,15.8L59.4,15.4L58.0,15.0L56.5,14.7L55.1,14.5L53.6,14.3L52.1,14.1L50.6,14.0L49.1,14.0L47.6,14.0L46.1,14.1L44.6,14.2L43.1,14.4L41.6,14.7L40.1,15.0L38.6,15.4L37.2,15.9L35.8,16.5L34.4,17.1L33.0,17.7L31.7,18.5L30.4,19.3L29.1,20.1L27.9,21.0L26.7,22.0L25.6,23.0L24.5,24.0L23.5,25.1L22.4,26.3L21.5,27.4L20.5,28.6L19.7,29.9L18.8,31.1L18.1,32.4L17.4,33.8L16.7,35.2L16.1,36.6L15.6,38.0L15.1,39.4L14.7,40.9L14.3,42.4L14.1,43.9L13.9,45.4L13.7,46.9L13.7,48.4L13.7,49.9L13.8,51.4L13.9,52.9L13.9,52.9L13.8,51.4L13.8,49.9L13.9,48.4L14.1,46.9L14.3,45.4L14.6,44.0L14.9,42.5L15.4,41.1L15.9,39.7L16.4,38.3L17.0,36.9L17.7,35.6L18.4,34.3L19.1,33.0L19.9,31.8L20.7,30.6L21.6,29.4L22.5,28.3L23.5,27.2L24.5,26.1L25.5,25.1L26.6,24.1L27.7,23.2L28.9,22.3L30.1,21.4L31.3,20.7L32.5,19.9L33.8,19.3L35.1,18.7L36.5,18.1L37.8,17.6L39.2,17.2L40.6,16.9L42.0,16.6L43.4,16.4L44.9,16.2L46.3,16.1L47.7,16.1L49.1,16.1L50.5,16.2L52.0,16.3L53.3,16.5L54.7,16.7L56.1,17.0L57.5,17.3L58.8,17.7L60.1,18.1L61.4,18.6L62.7,19.1L64.0,19.7L65.3,20.3L66.5,21.0L67.7,21.7L68.9,22.4L70.0,23.2L71.1,24.0L72.2,24.9L73.3,25.8L74.3,26.8L75.3,27.8Z"/><path d="M78.1,25.3L77.1,24.3L76.0,23.3L75.0,22.4L73.8,21.5L72.7,20.7L71.5,19.9L70.3,19.1L69.1,18.4L67.8,17.8L66.6,17.1L65.3,16.5L64.0,16.0L62.6,15.5L61.3,15.1L60.0,14.7L58.6,14.3L57.2,14.0L55.8,13.7L54.5,13.5L53.1,13.3L51.6,13.2L50.2,13.1L48.8,13.1L47.4,13.1L46.0,13.2L44.6,13.4L43.2,13.6L41.8,13.8L40.4,14.1L39.0,14.5L37.6,14.9L36.3,15.4L34.9,15.9L33.6,16.5L32.4,17.2L31.1,17.9L29.9,18.6L28.7,19.4L27.6,20.3L26.5,21.2L25.4,22.1L24.3,23.1L23.3,24.1L22.4,25.1L21.4,26.2L20.5,27.3L19.7,28.5L18.9,29.6L18.1,30.8L17.4,32.1L16.7,33.3L16.1,34.6L15.5,35.9L15.0,37.2L14.5,38.6L14.1,40.0L13.7,41.3L13.4,42.7L13.1,44.1L12.9,45.6L12.9,45.6L13.2,44.2L13.5,42.7L13.8,41.4L14.2,40.0L14.6,38.6L15.2,37.3L15.7,36.0L16.3,34.7L17.0,33.5L17.7,32.2L18.4,31.0L19.2,29.8L20.0,28.7L20.9,27.6L21.8,26.5L22.7,25.4L23.7,24.4L24.7,23.4L25.7,22.5L26.8,21.5L27.9,20.7L29.0,19.8L30.2,19.1L31.4,18.3L32.6,17.6L33.9,17.0L35.2,16.4L36.5,15.9L37.8,15.5L39.2,15.1L40.5,14.7L41.9,14.4L43.3,14.2L44.7,14.0L46.1,13.9L47.4,13.8L48.8,13.8L50.2,13.8L51.6,13.9L53.0,14.1L54.4,14.2L55.7,14.5L57.1,14.7L58.4,15.1L59.7,15.4L61.1,15.8L62.4,16.3L63.7,16.8L64.9,17.3L66.2,17.9L67.4,18.5L68.6,19.2L69.8,19.9L71.0,20.6L72.1,21.4L73.2,22.2L74.3,23.1L75.4,24.0L76.4,25.0L77.4,25.9Z"/><path d="M79.0,24.6L78.0,23.6L77.0,22.7L76.0,21.9L75.0,21.0L73.9,20.2L72.8,19.5L71.7,18.7L70.5,18.1L69.4,17.4L68.2,16.8L67.0,16.2L65.8,15.7L64.6,15.2L63.4,14.7L62.1,14.3L60.9,13.9L59.6,13.5L58.3,13.2L57.0,13.0L55.8,12.7L54.5,12.5L53.1,12.4L51.8,12.3L50.5,12.2L49.2,12.2L47.9,12.2L46.6,12.3L45.3,12.4L43.9,12.6L42.6,12.8L41.3,13.0L40.0,13.3L38.8,13.6L37.5,14.0L36.2,14.5L35.0,15.0L33.8,15.5L32.6,16.1L31.4,16.8L30.3,17.4L29.2,18.2L28.1,18.9L27.1,19.7L26.0,20.5L25.0,21.4L24.1,22.3L23.1,23.3L22.2,24.2L21.4,25.2L20.5,26.2L19.7,27.3L19.0,28.4L18.2,29.5L17.5,30.6L16.9,31.7L16.3,32.9L15.7,34.1L15.2,35.3L14.7,36.5L14.2,37.7L14.2,37.7L14.7,36.5L15.2,35.3L15.8,34.1L16.4,33.0L17.1,31.8L17.7,30.7L18.5,29.6L19.2,28.5L20.0,27.5L20.8,26.5L21.7,25.5L22.6,24.5L23.5,23.6L24.4,22.7L25.4,21.8L26.4,21.0L27.4,20.2L28.4,19.4L29.5,18.6L30.6,18.0L31.8,17.3L32.9,16.7L34.1,16.1L35.3,15.6L36.5,15.1L37.7,14.7L39.0,14.3L40.2,14.0L41.5,13.7L42.8,13.5L44.1,13.3L45.3,13.2L46.6,13.1L47.9,13.0L49.2,13.0L50.5,13.1L51.8,13.1L53.1,13.2L54.4,13.4L55.6,13.6L56.9,13.8L58.1,14.1L59.4,14.4L60.6,14.8L61.8,15.2L63.0,15.6L64.2,16.1L65.4,16.6L66.6,17.1L67.7,17.7L68.9,18.3L70.0,18.9L71.1,19.6L72.2,20.3L73.2,21.1L74.3,21.8L75.3,22.7L76.2,23.5L77.2,24.4L78.1,25.3Z"/><path d="M79.5,24.1L78.7,23.3L77.8,22.5L76.9,21.8L76.0,21.0L75.1,20.3L74.3,19.4L73.3,18.8L72.4,18.1L71.4,17.5L70.4,16.9L69.3,16.4L68.3,15.9L67.3,15.4L66.2,14.9L65.2,14.5L64.1,14.1L63.0,13.7L61.9,13.3L60.8,13.0L59.7,12.7L58.6,12.5L57.4,12.2L56.3,12.0L55.2,11.8L54.0,11.7L52.9,11.6L51.7,11.5L50.6,11.5L49.5,11.4L48.3,11.5L47.2,11.5L46.0,11.6L44.9,11.7L43.7,11.8L42.6,12.0L41.4,12.2L40.3,12.5L39.2,12.8L38.1,13.1L37.0,13.5L35.9,13.9L34.8,14.3L33.8,14.8L32.7,15.3L31.7,15.8L30.7,16.4L29.7,17.0L28.8,17.7L27.8,18.3L26.9,19.0L26.0,19.8L25.2,20.5L24.3,21.3L23.5,22.1L22.7,22.9L21.9,23.8L21.2,24.6L20.4,25.5L19.7,26.4L19.1,27.3L19.1,27.3L19.8,26.4L20.5,25.5L21.2,24.7L22.0,23.8L22.8,23.0L23.6,22.2L24.5,21.5L25.3,20.7L26.2,20.0L27.1,19.3L28.1,18.6L29.0,18.0L30.0,17.4L30.9,16.8L31.9,16.2L33.0,15.7L34.0,15.2L35.0,14.8L36.1,14.3L37.2,14.0L38.3,13.6L39.3,13.3L40.5,13.0L41.6,12.8L42.7,12.6L43.8,12.4L44.9,12.3L46.1,12.2L47.2,12.1L48.3,12.1L49.5,12.1L50.6,12.1L51.7,12.2L52.8,12.3L54.0,12.4L55.1,12.5L56.2,12.7L57.3,12.9L58.4,13.2L59.5,13.4L60.6,13.7L61.7,14.1L62.7,14.4L63.8,14.8L64.8,15.2L65.9,15.7L66.9,16.1L67.9,16.6L68.9,17.1L69.9,17.7L70.9,18.2L71.9,18.8L72.8,19.5L73.8,20.1L74.7,20.8L75.6,21.5L76.4,22.2L77.3,23.0L78.1,23.8L79.0,24.6Z"/></g></symbol>
+  <filter id="stamp" x="-6%" y="-6%" width="112%" height="112%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="4" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G" result="d"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.42" numOctaves="2" seed="9" result="n2"/>
+    <feColorMatrix in="n2" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -3.2 2.55" result="speck"/>
+    <feComposite in="d" in2="speck" operator="in"/>
+  </filter>
+  <mask id="seal-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+    <rect width="100" height="100" fill="#fff"/><path fill="#000" d="M44.7 59.7V67.7H34.6V64.8ZM31.9 74.5Q34.2 74.3 38.4 73.8Q42.5 73.2 47.7 72.5Q53 71.7 58.4 70.9L58.6 71.7Q55.3 73.8 49.2 77.2Q43.1 80.5 35.3 84.3ZM42.2 65.6 44.7 67.1V75L34.5 78.1L38.8 75.1Q39.4 79.5 37.8 81.9Q36.3 84.3 34.6 85L30.2 74.7Q33.1 73.5 33.9 72.7Q34.6 71.9 34.6 70.9V65.6ZM80 62.1Q79.7 62.6 79.1 62.8Q78.5 63 77.3 62.7Q74 64.1 69.5 65.2Q65 66.3 60.7 66.9L60 66.1Q61.9 64.6 63.9 62.6Q65.8 60.5 67.5 58.5Q69.2 56.5 70.1 55ZM54.7 52.4Q56.4 57.7 59.4 61.4Q62.4 65 66.4 67.4Q70.3 69.8 75 71.3Q79.7 72.8 84.8 73.8L84.7 74.6Q78.4 76.2 76.4 84Q70.3 81.1 65.8 77.3Q61.4 73.5 58.4 67.7Q55.4 61.9 53.8 52.9ZM55.8 53.4Q49.8 60.3 39.3 64.7Q28.8 69.1 15.6 71.3L15.2 70.5Q21.3 68.4 26.5 65.4Q31.6 62.5 35.7 59.1Q39.8 55.7 42.5 52.2H55.8ZM65.9 52.2V54.3H32.7V52.2ZM61.1 40.9 65.6 36 75 43Q74.7 43.5 74 43.9Q73.2 44.3 72.1 44.6V54.6Q72.1 54.8 70.6 55.3Q69.2 55.8 67.2 56.2Q65.2 56.6 63.6 56.6H61.9V40.9ZM36.7 55.1Q36.7 55.6 35.4 56.3Q34.1 57 32.1 57.6Q30.2 58.1 28.1 58.1H26.8V40.9V37L37.2 40.9H64.4V43H36.7ZM68.9 16.4Q68.9 16.4 69.9 17.1Q70.8 17.8 72.2 19Q73.6 20.2 75.2 21.5Q76.8 22.7 78 23.9Q77.7 25.1 75.9 25.1H21.7L21.1 23H64ZM74.1 26.8Q74.1 26.8 75 27.6Q75.9 28.3 77.4 29.4Q78.8 30.5 80.3 31.8Q81.9 33.1 83.2 34.2Q82.9 35.4 81.1 35.4H16.6L16 33.3H69.1ZM56.6 16Q56.5 16.8 56.1 17.2Q55.6 17.6 54.2 17.9V34.1H43.6V15Z"/>
+  </mask>
+  <symbol id="seal" viewBox="0 0 100 100"><g filter="url(#stamp)"><rect x="4" y="4" width="92" height="92" rx="8" fill="currentColor" mask="url(#seal-cut)"/></g></symbol>
+<!-- /build:defs -->
+  <symbol id="i-star" viewBox="0 0 16 16"><path fill="currentColor" d="M8 .8l2.1 4.4 4.8.6-3.5 3.3.9 4.8L8 11.6l-4.3 2.3.9-4.8L1.1 5.8l4.8-.6z"/></symbol>
+  <symbol id="i-gh" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 16 16"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3 3l1.1 1.1M11.9 11.9L13 13M3 13l1.1-1.1M11.9 4.1L13 3"/></g></symbol>
+  <symbol id="i-moon" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" d="M13.5 9.8A5.8 5.8 0 016.2 2.5a5.8 5.8 0 107.3 7.3z"/></symbol>
+</svg>
 
-    <section>
-      <h2>Building</h2>
-
-      <a class="project" href="https://github.com/Oldcircle/storyforge" target="_blank">
-        <div class="project-left">
-          <span class="project-name">StoryForge</span>
-          <span class="project-desc">AI-powered comic & short drama platform — one sentence to one episode</span>
-        </div>
-        <span class="project-meta">TypeScript</span>
-      </a>
-
-      <a class="project" href="https://github.com/Oldcircle/Trace---Onboarding-Demo" target="_blank">
-        <div class="project-left">
-          <span class="project-name">Trace</span>
-          <span class="project-desc">Onboarding & Product Demo</span>
-        </div>
-        <span class="project-meta">TypeScript</span>
-      </a>
-
-      <a class="project" href="https://github.com/Oldcircle/trace-viewer" target="_blank">
-        <div class="project-left">
-          <span class="project-name">Trace Viewer</span>
-          <span class="project-desc">Visual diagnostic tool for OpenClaw agent execution traces</span>
-        </div>
-        <span class="project-meta">TypeScript</span>
-      </a>
-
-      <a class="project" href="https://github.com/Oldcircle/ChromaCheckAI" target="_blank">
-        <div class="project-left">
-          <span class="project-name">ChromaCheck AI</span>
-          <span class="project-desc">AI color palette generator supporting Gemini, DeepSeek, and OpenAI</span>
-        </div>
-        <span class="project-meta">TypeScript</span>
-      </a>
-
-      <a class="project" href="https://github.com/Oldcircle/LinkStream" target="_blank">
-        <div class="project-left">
-          <span class="project-name">LinkStream</span>
-          <span class="project-desc">Phone-PC sync assistant</span>
-        </div>
-        <span class="project-meta">TypeScript</span>
-      </a>
-
-      <a class="project" href="https://github.com/Oldcircle/Data-Resolver" target="_blank">
-        <div class="project-left">
-          <span class="project-name">Data Resolver</span>
-          <span class="project-desc">Unstructured data processing tool</span>
-        </div>
-        <span class="project-meta">TypeScript</span>
-      </a>
-    </section>
-
-    <section>
-      <h2>Games</h2>
-
-      <a class="project" href="https://github.com/Oldcircle/Xiangqi" target="_blank">
-        <div class="project-left">
-          <span class="project-name">Xiangqi</span>
-          <span class="project-desc">Chinese Chess with AI opponent</span>
-        </div>
-        <span class="project-meta">2 stars</span>
-      </a>
-
-      <a class="project" href="https://github.com/Oldcircle/Gomoku" target="_blank">
-        <div class="project-left">
-          <span class="project-name">Gomoku</span>
-          <span class="project-desc">Five-in-a-row with AI</span>
-        </div>
-        <span class="project-meta">TypeScript</span>
-      </a>
-
-      <a class="project" href="https://github.com/Oldcircle/SurvivorRoyale" target="_blank">
-        <div class="project-left">
-          <span class="project-name">Survivor Royale</span>
-          <span class="project-desc">Battle royale</span>
-        </div>
-        <span class="project-meta">TypeScript</span>
-      </a>
-
-      <a class="project" href="https://github.com/Oldcircle/Mini-Clash" target="_blank">
-        <div class="project-left">
-          <span class="project-name">Mini Clash</span>
-          <span class="project-desc">Clash Royale-style strategy game</span>
-        </div>
-        <span class="project-meta">TypeScript</span>
-      </a>
-
-      <a class="project" href="https://github.com/Oldcircle/JokerPoker" target="_blank">
-        <div class="project-left">
-          <span class="project-name">Joker Poker</span>
-          <span class="project-desc">Balatro-inspired card game</span>
-        </div>
-        <span class="project-meta">TypeScript</span>
-      </a>
-
-      <a class="project" href="https://github.com/Oldcircle/NeonSurvivor" target="_blank">
-        <div class="project-left">
-          <span class="project-name">Neon Survivor</span>
-          <span class="project-desc">Zombie survival shooter</span>
-        </div>
-        <span class="project-meta">TypeScript</span>
-      </a>
-
-      <a class="project" href="https://github.com/Oldcircle/Alpine-Escape" target="_blank">
-        <div class="project-left">
-          <span class="project-name">Alpine Escape</span>
-          <span class="project-desc">Ski adventure</span>
-        </div>
-        <span class="project-meta">TypeScript</span>
-      </a>
-
-      <a class="project" href="https://github.com/Oldcircle?tab=repositories" target="_blank">
-        <div class="project-left">
-          <span class="project-name">...and 20+ more</span>
-          <span class="project-desc">Chess, rhythm, puzzle, adventure games</span>
-        </div>
-        <span class="project-meta">→</span>
-      </a>
-    </section>
-
-    <section>
-      <h2>Contributing to</h2>
-
-      <div class="contrib-item">
-        <a href="https://github.com/moeru-ai/airi/pull/1333" target="_blank">moeru-ai/airi</a>
-        <div class="contrib-detail">Fix Telegram bot velin rendering, action loop, and LLM compatibility</div>
-      </div>
-
-      <div class="contrib-item">
-        <a href="https://github.com/lbjlaq/Antigravity-Manager/pull/2286" target="_blank">Antigravity-Manager</a>
-        <div class="contrib-detail">Dynamic pro model fallback with account-aware remapping</div>
-      </div>
-    </section>
-
-    <section>
-      <h2>Tech Stack</h2>
-      <div class="tags">
-        <span class="tag">TypeScript</span>
-        <span class="tag">React</span>
-        <span class="tag">Python</span>
-        <span class="tag">Rust</span>
-        <span class="tag">AI / LLM</span>
-        <span class="tag">Game Dev</span>
-        <span class="tag">Node.js</span>
-      </div>
-    </section>
-
-    <footer class="footer">
-      Central China Normal University · Vibe Coder · Builder of many things
-    </footer>
-
+<header class="topbar" id="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="#top" aria-label="Yuan Bo">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#enso"/></svg>
+      <span class="brand-name"><span lang="en">Yuan Bo</span><span lang="zh">袁博</span></span>
+    </a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#work"><span lang="en">Work</span><span lang="zh">代表作</span></a>
+      <a href="#tools"><span lang="en">Tools</span><span lang="zh">工具</span></a>
+      <a href="#research"><span lang="en">Research</span><span lang="zh">研究</span></a>
+      <a href="#sims"><span lang="en">Simulations</span><span lang="zh">模拟</span></a>
+      <a href="#games"><span lang="en">Games</span><span lang="zh">游戏</span></a>
+    </nav>
+    <div class="toggles">
+      <button class="icon-btn" type="button" data-action="lang" aria-label="Switch language / 切换语言"><span lang="en">中文</span><span lang="zh">EN</span></button>
+      <button class="icon-btn theme-btn" type="button" data-action="theme" aria-label="Toggle dark mode">
+        <svg class="sun" aria-hidden="true"><use href="#i-sun"/></svg><svg class="moon" aria-hidden="true"><use href="#i-moon"/></svg>
+      </button>
+      <a class="icon-btn" href="https://github.com/Oldcircle" aria-label="GitHub"><svg aria-hidden="true"><use href="#i-gh"/></svg></a>
+    </div>
   </div>
+</header>
+
+<main>
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-text">
+        <p class="eyebrow"><span lang="en">Yuan Bo · @Oldcircle</span><span lang="zh">袁博 · @Oldcircle</span></p>
+        <h1>
+          <span lang="en">I build AI agents that <em>show their work</em>.</span>
+          <span lang="zh">我做 AI agent，<br><em>让每个结论都有据可查</em>。</span>
+        </h1>
+        <p class="lede" lang="en">Agent skills, developer tools, a research paper and a few iOS apps. The ones I like best refuse to guess: a claim has to name the file it came from, observations are sealed before any reasoning starts, and every number is run before it goes on the page.</p>
+        <p class="lede" lang="zh">写 agent skill 和开发者工具，发过一篇论文，也上架了几款 iOS 应用。我最满意的几个项目都不靠猜：结论要说明出自哪个文件，观察先封存、再推理，写到页面上的数字都先实际跑过一遍。</p>
+        <p class="affil"><span lang="en">AI master's student at Harbin Institute of Technology, Shenzhen.</span><span lang="zh">哈尔滨工业大学（深圳）人工智能方向硕士在读。</span></p>
+        <ul class="facts">
+          <li><b data-stars="geo-sleuth">188</b><span lang="en">GitHub stars on geo-sleuth</span><span lang="zh">geo-sleuth 的 GitHub 星标</span></li>
+          <li><b>AACL</b><span lang="en">2026 main-conference paper</span><span lang="zh">2026 主会论文</span></li>
+          <li><b>5</b><span lang="en">iOS apps on the App Store</span><span lang="zh">款 iOS 应用已上架</span></li>
+          <li><b>20+</b><span lang="en">games that run in a browser</span><span lang="zh">个网页小游戏</span></li>
+        </ul>
+        <div class="cta">
+          <a class="btn primary" href="https://github.com/Oldcircle"><svg aria-hidden="true"><use href="#i-gh"/></svg>GitHub</a>
+          <a class="btn" href="#work"><span lang="en">See the work</span><span lang="zh">看看作品</span> ↓</a>
+        </div>
+      </div>
+      <figure class="hero-mark" aria-hidden="true">
+        <svg class="enso-big" viewBox="0 0 100 100">
+          <defs>
+            <mask id="draw" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+<!-- build:spine -->
+              <path class="spine" d="M32.6,77.9L33.7,78.9L34.9,79.9L36.2,80.7L37.6,81.5L39.0,82.2L40.4,82.9L41.9,83.4L43.4,83.9L44.9,84.2L46.5,84.5L48.1,84.7L49.6,84.8L51.2,84.8L52.8,84.8L54.4,84.7L56.0,84.6L57.6,84.3L59.2,84.1L60.8,83.7L62.3,83.3L63.9,82.8L65.4,82.3L67.0,81.7L68.5,81.0L70.0,80.2L71.4,79.4L72.8,78.5L74.2,77.6L75.5,76.5L76.8,75.4L78.0,74.3L79.2,73.0L80.3,71.7L81.3,70.3L82.2,68.9L83.0,67.4L83.8,65.9L84.4,64.3L85.0,62.7L85.5,61.1L85.8,59.4L86.1,57.7L86.3,56.1L86.5,54.4L86.5,52.7L86.5,51.0L86.3,49.4L86.1,47.7L85.9,46.1L85.6,44.5L85.2,42.9L84.8,41.3L84.2,39.7L83.7,38.2L83.0,36.7L82.3,35.3L81.5,33.8L80.7,32.5L79.8,31.1L78.8,29.8L77.8,28.6L76.7,27.4L75.6,26.2L74.5,25.1L73.3,24.1L72.0,23.1L70.7,22.2L69.4,21.3L68.1,20.5L66.7,19.7L65.3,19.0L63.8,18.3L62.4,17.7L60.9,17.2L59.4,16.7L57.9,16.3L56.3,15.9L54.8,15.6L53.2,15.4L51.6,15.2L50.0,15.1L48.4,15.1L46.8,15.1L45.2,15.2L43.6,15.4L42.0,15.7L40.5,16.0L38.9,16.4L37.4,16.9L35.9,17.5L34.4,18.1L32.9,18.8L31.5,19.6L30.1,20.5L28.8,21.4L27.5,22.4L26.3,23.5L25.1,24.6L23.9,25.7L22.8,26.9L21.8,28.2L20.8,29.5L19.9,30.8L19.0,32.2L18.2,33.6L17.4,35.1L16.7,36.5L16.1,38.1L15.5,39.6L15.0,41.2L14.6,42.8L14.3,44.4L14.0,46.0L13.9,47.7L13.8,49.3L13.8,51.0L13.9,52.6L14.1,54.3L14.4,55.9L14.8,57.5" fill="none" stroke="#fff" stroke-width="21" stroke-linecap="round" stroke-linejoin="round" pathLength="1"/>
+<!-- /build:spine -->
+            </mask>
+          </defs>
+          <g mask="url(#draw)"><use href="#enso"/></g>
+        </svg>
+        <svg class="seal" viewBox="0 0 100 100"><use href="#seal"/></svg>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ================= 01 SELECTED WORK ================= -->
+  <section class="block" id="work">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="sec-num">01</p>
+        <h2><span lang="en">Selected work</span><span lang="zh">代表作</span></h2>
+        <p class="sec-sub"><span lang="en">Two agent skills. Hand either one a photo and ask.</span><span lang="zh">两个 agent skill，用法都一样：丢一张照片进去，然后提问。</span></p>
+      </header>
+
+      <article class="card feature">
+        <div class="f-media">
+          <div class="stepper" data-stepper>
+            <div class="stage">
+              <img class="on" src="assets/img/geo-sleuth-1.webp" width="900" height="600" alt="The photo: a clay oven in a field, a railway viaduct and a mountain behind it">
+              <img src="assets/img/geo-sleuth-2.webp" width="900" height="600" alt="Region scan: candidate sites marked in orange across southern China" loading="lazy">
+              <img src="assets/img/geo-sleuth-3.webp" width="900" height="600" alt="Skyline fit: computed horizons drawn over the photo for the top candidates" loading="lazy">
+              <img src="assets/img/geo-sleuth-4.webp" width="900" height="600" alt="Answer: camera position and field of view on satellite imagery, within 2 m" loading="lazy">
+            </div>
+            <ol class="steps" role="tablist" aria-label="geo-sleuth, step by step">
+              <li><button type="button" role="tab" aria-selected="true"><b>01</b><span lang="en">One photo, no text</span><span lang="zh">一张照片，没有字</span></button></li>
+              <li><button type="button" role="tab" aria-selected="false"><b>02</b><span lang="en">27,335 → 171 sites</span><span lang="zh">27,335 → 171 处</span></button></li>
+              <li><button type="button" role="tab" aria-selected="false"><b>03</b><span lang="en">Skyline fit → top 3</span><span lang="zh">天际线拟合 → 前 3</span></button></li>
+              <li><button type="button" role="tab" aria-selected="false"><b>04</b><span lang="en">Camera, ±2 m</span><span lang="zh">相机位置 ±2 米</span></button></li>
+            </ol>
+            <div class="step-caps" aria-live="polite">
+              <p class="on"><span lang="en"><b>Read the photo.</b> Catenary masts on the viaduct mean an electrified railway, the mountain is about 3 km away, and the rice is harvested while the grass is still green. South China, as a bet, not a proof.</span><span lang="zh"><b>读图。</b>高架上的杆子是接触网支柱，说明是电气化铁路；陡峭的山在约 3 公里外；稻子已收割，草还绿着。先押华南，是判断，不是证明。</span></p>
+              <p><span lang="en"><b>Region scan.</b> Every railway bridge in the region from OpenStreetMap, 27,335 segments, with a 360° horizon computed every 400 m. 171 sites have flat ground nearby, a clear mountain within a few km and a flat horizon beside it.</span><span lang="zh"><b>区域扫描。</b>从 OpenStreetMap 取出区域内所有铁路桥，共 27,335 段，每 400 米用高程数据算一次 360° 地平线。附近平坦、几公里内有明显山峰、旁边地平线平坦的，只剩 171 处。</span></p>
+              <p><span lang="en"><b>Skyline fit.</b> 14,372 camera positions, each rendered with the ridge line it would see, leave 22. The top three are drawn back onto the photo: #1 only scored well because the oven hides a bump; #2, Qingyuan, fits from the foot of the mountain to the edge of the frame.</span><span lang="zh"><b>天际线拟合。</b>14,372 个候选机位各自渲染出能看到的山脊线，剩下 22 个。前三名画回照片核对：第一名的凸起正好藏在烤炉后面；第二名清远从山脚到画面边缘都贴合。</span></p>
+              <p><span lang="en"><b>Pier count.</b> The 17 piers in the photo become 17 bearings from the camera, and where they meet the railway the intersections must be evenly spaced. One spot is left: ±2 m, with the direction the camera faced.</span><span lang="zh"><b>数桥墩。</b>照片里 17 根桥墩变成从机位出发的 17 条方位线，它们和铁路线的交点必须间距均匀。最后只剩一个点：误差 ±2 米，朝向也一并给出。</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="f-body">
+          <p class="kicker"><span lang="en">Agent skill · Python · MIT</span><span lang="zh">Agent skill · Python · MIT 协议</span></p>
+          <h3>geo-sleuth</h3>
+          <p class="desc" lang="en">Finds where a photo was taken, and shows its work. When there is no sign, plate or landmark to read, OpenStreetMap geometry, elevation data, satellite tiles and street view carry the search. Every conclusion points at the command that produced it.</p>
+          <p class="desc" lang="zh">找出一张照片是在哪儿拍的，并把推理过程摊开给你看。照片里没有招牌、车牌、地标可读时，就靠 OpenStreetMap 几何、高程数据、卫星图和街景来搜。每个结论都指向产出它的那条命令。</p>
+          <div class="funnel">
+            <div class="nums">27,335 <i>→</i> 171 <i>→</i> 22 <i>→</i> 3 <i>→</i> <span class="hit">1</span></div>
+            <p lang="en">Candidates left after each step, from every railway bridge in the region to one camera position.</p>
+            <p lang="zh">每一步之后剩下的候选：从区域内所有铁路桥，一直收窄到一个相机位置。</p>
+          </div>
+          <div class="cmd"><code>npx skills add Oldcircle/geo-sleuth</code><button class="copy" type="button" data-copy="npx skills add Oldcircle/geo-sleuth"><span lang="en">Copy</span><span lang="zh">复制</span></button></div>
+          <p class="works"><span lang="en">Works with Claude Code, Codex, Cursor, Gemini CLI, OpenCode and GitHub Copilot.</span><span lang="zh">支持 Claude Code、Codex、Cursor、Gemini CLI、OpenCode 和 GitHub Copilot。</span></p>
+          <div class="links">
+            <a class="more" href="https://github.com/Oldcircle/geo-sleuth"><span lang="en">View on GitHub</span><span lang="zh">在 GitHub 上查看</span> ↗</a>
+            <span class="stars" data-stars-wrap="geo-sleuth"><svg aria-hidden="true"><use href="#i-star"/></svg><span data-stars="geo-sleuth">188</span></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card feature flip">
+        <div class="f-media parchment">
+          <div class="video-box">
+            <video lang="en" muted loop playsinline preload="none" poster="assets/img/holmes.webp" data-autoplay aria-label="A case file being written: 16 observations are listed and sealed, then 6 deductions citing them, then the owner's grades">
+              <source src="assets/img/holmes.mp4" type="video/mp4">
+            </video>
+            <video lang="zh" muted loop playsinline preload="none" poster="assets/img/holmes-zh.webp" data-autoplay aria-label="一份案卷的生成过程：先列出并封存 16 条观察，再写出引用它们的 6 条推理，最后由照片主人打分">
+              <source src="assets/img/holmes-zh.mp4" type="video/mp4">
+            </video>
+          </div>
+          <p class="f-media-note"><span lang="en">A real desk photo. The case file is sealed before the first deduction is written.</span><span lang="zh">一张真实的桌面照片。写第一条推理之前，观察清单已经封存。</span></p>
+        </div>
+        <div class="f-body">
+          <p class="kicker"><span lang="en">Agent skill · MIT · no API key</span><span lang="zh">Agent skill · MIT 协议 · 无需 API Key</span></p>
+          <h3>Holmes <span class="alt">福尔摩斯</span></h3>
+          <p class="desc" lang="en">Reads a photo the way Sherlock Holmes reads a stranger. It lists what it can see and seals the list before it reasons. Each conclusion cites the observations it rests on and offers another explanation, and then you grade it.</p>
+          <p class="desc" lang="zh">像福尔摩斯读陌生人一样读一张照片。先把看到的东西列出来、封存清单，然后才开始推理。每条结论都引用它依据的观察，并给出另一种可能的解释，最后由你来打分。</p>
+          <div class="score">
+            <div><b>16</b><span lang="en">observations</span><span lang="zh">条观察</span></div>
+            <div><b>6</b><span lang="en">deductions</span><span lang="zh">条推理</span></div>
+            <div class="good"><b>5</b><span lang="en">hits</span><span lang="zh">条命中</span></div>
+            <div class="bad"><b>1</b><span lang="en">miss</span><span lang="zh">条落空</span></div>
+            <div><b>0</b><span lang="en">made up</span><span lang="zh">条编造</span></div>
+          </div>
+          <div class="cmd"><code>npx skills add Oldcircle/holmes-skill</code><button class="copy" type="button" data-copy="npx skills add Oldcircle/holmes-skill"><span lang="en">Copy</span><span lang="zh">复制</span></button></div>
+          <p class="works"><span lang="en">Graded by the desk's owner. Works with any agent that reads SKILL.md and can see images.</span><span lang="zh">由桌子的主人逐条打分。任何能读 SKILL.md、能看图的 agent 都能用。</span></p>
+          <div class="links">
+            <a class="more" href="https://github.com/Oldcircle/holmes-skill"><span lang="en">View on GitHub</span><span lang="zh">在 GitHub 上查看</span> ↗</a>
+            <span class="stars" data-stars-wrap="holmes-skill" hidden><svg aria-hidden="true"><use href="#i-star"/></svg><span data-stars="holmes-skill"></span></span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= 02 TOOLS ================= -->
+  <section class="block" id="tools">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="sec-num">02</p>
+        <h2><span lang="en">Tools for agents</span><span lang="zh">给 agent 用的工具</span></h2>
+        <p class="sec-sub"><span lang="en">Memory that stays in shape, a way of teaching, a one-click setup, and a look inside the loop.</span><span lang="zh">让记忆文件不走样，把一套教学法做成 skill，一键装好环境，再看清 agent 每一步在干什么。</span></p>
+      </header>
+
+      <div class="bento">
+        <article class="card tool wide">
+          <div class="visual"><pre class="term" aria-label="Example output of trellis lint"><span class="p">$</span> trellis lint examples/vault --explain
+
+<span class="f">reference-deploy-runbook.md</span>
+  <span class="e">✗</span> T201:1  not listed in MEMORY.md — unreachable
+      <span class="h">→ Add a one-line hook to MEMORY.md, or delete the file.</span>
+
+<span class="f">MEMORY.md</span>
+  <span class="w">!</span> T301:13  hook carries a chronicle detail: <span class="c">'2026-04-18'</span>
+      <span class="h">→ Dates belong in the file or the git log.</span>
+
+<span class="f">project-checkout.md</span>
+  <span class="w">!</span> T303:11  relative time reference: <span class="c">'last week'</span>
+      <span class="h">→ Write the absolute date. Memory outlives the session that wrote it.</span></pre></div>
+          <div class="tool-text">
+            <p class="kicker"><span lang="en">Python · zero dependencies · MIT</span><span lang="zh">Python · 零依赖 · MIT 协议</span></p>
+            <h3>Trellis</h3>
+            <p class="desc" lang="en">The discipline layer for file-based agent memory. Keep the markdown files your agent already understands, and add the budgets, ownership rules and linter that stop them from quietly rotting after a few months.</p>
+            <p class="desc" lang="zh">给文件式 agent 记忆加一层纪律。agent 已经会读的 markdown 文件照旧用，再补上预算、归属规则和一个 linter，免得它们用上几个月就越写越乱。</p>
+            <a class="more" href="https://github.com/Oldcircle/trellis"><span lang="en">View on GitHub</span><span lang="zh">在 GitHub 上查看</span> ↗</a>
+          </div>
+        </article>
+
+        <article class="card tool">
+          <div class="visual">
+            <div class="rules" lang="en">
+              <div class="head"><span>Rule</span><span>What the learner said</span></div>
+              <div><span>Define each term where it first appears</span><span>“None of these parameters are defined. I can't follow any of it.”</span></div>
+              <div><span>Every derivation line names its reason</span><span>“There's no derivation. I can't see where this formula comes from.”</span></div>
+              <div><span>Run a number before writing it</span><span>Nobody complained. It still caught four false statements.</span></div>
+            </div>
+            <div class="rules" lang="zh">
+              <div class="head"><span>规矩</span><span>触发它的那句话</span></div>
+              <div><span>术语首现必定义</span><span>「这一上来这几个参数就没定义啊，搞得我根本看不懂」</span></div>
+              <div><span>推导每行带依据</span><span>「这里都没有推导，我看不懂这公式是怎么来的」</span></div>
+              <div><span>有数字必先跑</span><span>没人抗议，但它拦下了四个错误陈述</span></div>
+            </div>
+          </div>
+          <p class="kicker"><span lang="en">Claude Code skill · in Chinese</span><span lang="zh">Claude Code skill · 中文</span></p>
+          <h3>deep-lecture</h3>
+          <p class="desc" lang="en">A way of teaching, packaged as a skill. Read the primary sources, run every number, publish a one-page interactive lecture, then patch it in place wherever the learner gets lost.</p>
+          <p class="desc" lang="zh">把一套教学方法做成 skill：先读原始来源，把每个数字跑一遍，做成一页可交互的课件发布出去；学的人哪里没看懂，就当场改哪里。</p>
+          <a class="more" href="https://github.com/Oldcircle/claude-skills"><span lang="en">View on GitHub</span><span lang="zh">在 GitHub 上查看</span> ↗</a>
+        </article>
+
+        <article class="card tool">
+          <div class="visual">
+            <div class="picker">
+              <ul>
+                <li class="on">OpenCode</li><li class="on">Claude Code</li><li class="on">Kimi Code</li>
+                <li>Qwen Code</li><li>Codex CLI</li><li>Gemini CLI</li>
+                <li>Hermes</li><li>OpenClaw</li><li>Goose</li>
+              </ul>
+              <p lang="en">Press <kbd>Enter</kbd> without changing anything to get the recommended three.</p>
+              <p lang="zh">什么都不动直接按 <kbd>Enter</kbd>，就是推荐的三件套。</p>
+            </div>
+          </div>
+          <p class="kicker"><span lang="en">Windows · Shell · Chinese</span><span lang="zh">Windows · Shell · 中文</span></p>
+          <h3>wsl-agent-kit</h3>
+          <p class="desc" lang="en">Double-click once on Windows to get WSL2, your pick of nine AI agents and a Chinese office workspace. API keys from Chinese providers work out of the box.</p>
+          <p class="desc" lang="zh">在 Windows 上双击一次：装好 WSL2，从九个 AI agent 里任选，配好中文办公工作区。国内 API Key 即插即用。</p>
+          <a class="more" href="https://github.com/Oldcircle/wsl-agent-kit"><span lang="en">View on GitHub</span><span lang="zh">在 GitHub 上查看</span> ↗</a>
+        </article>
+      </div>
+
+      <div class="also">
+        <a class="card" href="https://github.com/Oldcircle/ai-shell">
+          <h4>ai-shell <span class="arrow">↗</span></h4>
+          <p lang="en">Build your own Claude Code from scratch: streaming query loop, tools, permissions, context compaction.</p>
+          <p lang="zh">从零写一个自己的 Claude Code：流式对话循环、工具、权限、上下文压缩都自己实现。</p>
+        </a>
+        <a class="card" href="https://github.com/Oldcircle/trace-viewer">
+          <h4>trace-viewer <span class="arrow">↗</span></h4>
+          <p lang="en">See every LLM call, tool call and token spent in an OpenClaw agent run.</p>
+          <p lang="zh">把 OpenClaw agent 一次运行里的每次 LLM 调用、工具调用和 token 花费逐条展开。</p>
+        </a>
+        <a class="card" href="https://github.com/Oldcircle/claude-workspace-skills">
+          <h4>claude-workspace-skills <span class="arrow">↗</span></h4>
+          <p lang="en">Slash commands that keep a many-project workspace in order: scaffolding, checks, publishing, fork syncing.</p>
+          <p lang="zh">管理多项目工作区的斜杠命令：建项目、查规范、发布到 GitHub、同步 fork。</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 03 RESEARCH ================= -->
+  <section class="block" id="research">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="sec-num">03</p>
+        <h2><span lang="en">Research</span><span lang="zh">研究</span></h2>
+        <p class="sec-sub"><span lang="en">Knowledge graph question answering: let a small model do most of the work, and call the large one only when it is needed.</span><span lang="zh">知识图谱问答：大部分活交给小模型，只在确实需要时才调用大模型。</span></p>
+      </header>
+
+      <article class="card paper">
+        <a class="paper-fig" href="https://arxiv.org/abs/2603.20017">
+          <img src="assets/img/routerkgqa.webp" width="1400" height="825" loading="lazy" alt="RouterKGQA pipeline: a specialized LLM generates a reasoning path; if the path is unreachable in the knowledge graph, a general LLM repairs it; the query is then executed with constraint relaxation">
+        </a>
+        <div class="paper-body">
+          <div class="paper-head">
+            <span class="venue"><span lang="en">AACL-IJCNLP 2026 · Main Conference</span><span lang="zh">AACL-IJCNLP 2026 · 主会</span></span>
+            <h3>RouterKGQA: Specialized–General Model Routing for Constraint-Aware Knowledge Graph Question Answering</h3>
+            <p class="authors"><b>Bo Yuan</b>*, Hexuan Deng*, Xuebo Liu, Min Zhang <small lang="en">· *equal contribution</small><small lang="zh">· *共同一作</small></p>
+            <div class="links">
+              <a class="more" href="https://arxiv.org/abs/2603.20017">arXiv:2603.20017 ↗</a>
+              <a class="more" href="https://arxiv.org/pdf/2603.20017">PDF ↗</a>
+            </div>
+          </div>
+          <div class="paper-main">
+            <p class="desc" lang="en">A small specialized model drafts the reasoning path over the knowledge graph. When that path cannot be reached in the graph, a large general model is called in to repair it. Accuracy goes up while the cost stays close to the small model's.</p>
+            <p class="desc" lang="zh">小的专用模型先在知识图谱上生成推理路径；路径在图里走不通时，才调用大的通用模型来修。准确率更高，开销仍接近只用小模型。</p>
+            <div class="nums3">
+              <div><b>+3.57</b><span lang="en">F1 over the previous best</span><span lang="zh">F1 超过此前最好结果</span></div>
+              <div><b>+0.49</b><span lang="en">Hits@1 over the previous best</span><span lang="zh">Hits@1 超过此前最好结果</span></div>
+              <div><b>1.15</b><span lang="en">LLM calls per question</span><span lang="zh">每题平均 LLM 调用次数</span></div>
+            </div>
+            <p class="works"><span lang="en">Averaged across benchmarks.</span><span lang="zh">各基准上的平均值。</span></p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= 04 SIMULATIONS ================= -->
+  <section class="block" id="sims">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="sec-num">04</p>
+        <h2><span lang="en">Simulations and visual explainers</span><span lang="zh">模拟与可视化</span></h2>
+        <p class="sec-sub"><span lang="en">Agents living in small worlds, and a model you can look inside.</span><span lang="zh">在小世界里自己过日子的 agent，还有一个能钻进去看的模型。</span></p>
+      </header>
+
+      <div class="grid2">
+        <a class="card shot" href="https://github.com/Oldcircle/backprop-viz">
+          <div class="img top">
+            <img lang="en" src="assets/img/backprop-viz.webp" width="1200" height="750" loading="lazy" alt="backprop-viz: the loss chapter, with the cross-entropy formula beside the 3D blocks of the LM head and softmax">
+            <img lang="zh" src="assets/img/backprop-viz-zh.webp" width="1200" height="750" loading="lazy" alt="反向传播可视化：「损失」一章，交叉熵公式旁边是输出头和 softmax 的 3D 方块">
+          </div>
+          <div class="body">
+            <p class="kicker"><span lang="en">Next.js · WebGL · English / 中文</span><span lang="zh">Next.js · WebGL · 中英双语</span></p>
+            <h3>backprop-viz</h3>
+            <p class="desc" lang="en">A 3D walkthrough of a GPT's backward pass. Every block sits where it sits in the forward pass but holds the gradient instead of the tensor. The numbers are computed live and checked against numerical derivatives.</p>
+            <p class="desc" lang="zh">GPT 反向传播的 3D 交互演示。每个方块的位置和前向传播时一样，装的却是梯度而不是张量。数字是实时算出来的，并用数值导数校验过。</p>
+            <p class="note"><span lang="en">Built on Brendan Bycroft's llm-viz.</span><span lang="zh">基于 Brendan Bycroft 的 llm-viz。</span></p>
+          </div>
+        </a>
+
+        <a class="card shot" href="https://github.com/Oldcircle/anima">
+          <div class="img"><img src="assets/img/anima.webp" width="1120" height="630" loading="lazy" alt="Anima's Godot front end: a pixel-art seaside town with a bakery, a café and a harbour, and a character's line of dialogue"></div>
+          <div class="body">
+            <p class="kicker">TypeScript · Godot · DeepSeek</p>
+            <h3>Anima</h3>
+            <p class="desc" lang="en">Seven anime characters share a seaside town, and each one is its own LLM agent. Every tick they decide what to do next from what they need, who they remember and what they can see. Friendships, grudges and gossip come out of the interactions.</p>
+            <p class="desc" lang="zh">七个动漫角色住在同一个海边小镇，每个角色都是独立的 LLM agent。每个 tick，他们根据自己的需求、记得的人和眼前发生的事，决定下一步做什么；友谊、积怨和流言都在互动中自然出现。</p>
+          </div>
+        </a>
+
+        <a class="card shot" href="https://github.com/Oldcircle/stardew-anima">
+          <div class="img termbox"><pre class="term" aria-label="Example tool calls"><span class="p">&gt;</span> observe()
+<span class="d">[Spring 12 · 09:30 · Sunny] Stamina 245/270 · Gold ¥850 · …</span>
+<span class="p">&gt;</span> go_to(<span class="c">"Pierre"</span>)
+<span class="p">&gt;</span> till_area(3, 4)
+<span class="p">&gt;</span> water_all()
+<span class="d">{</span>watered: <span class="c">30</span>, partial: <span class="c">true</span>, stopped: <span class="w">"low_stamina"</span><span class="d">}</span></pre></div>
+          <div class="body">
+            <p class="kicker"><span lang="en">Python · MCP server</span><span lang="zh">Python · MCP 服务器</span></p>
+            <h3>Stardew Anima</h3>
+            <p class="desc" lang="en">Lets an LLM play Stardew Valley the way a person does, through 28 intent-level tools for farming, fishing, foraging and talking to villagers. No screenshots, no vision.</p>
+            <p class="desc" lang="zh">让 LLM 像人一样玩星露谷物语：通过 28 个意图级工具种地、钓鱼、采集、和村民聊天。不截图，也不用视觉。</p>
+          </div>
+        </a>
+
+        <a class="card shot" href="https://oldcircle.github.io/blockfire/">
+          <div class="img"><img src="assets/img/blockfire.webp" width="1120" height="700" loading="lazy" alt="BlockFire: first-person view of a voxel forest with a zombie approaching, rifle and block hotbar in the HUD"></div>
+          <div class="body">
+            <p class="kicker"><span lang="en">Three.js · one HTML file · playable</span><span lang="zh">Three.js · 单个 HTML 文件 · 可在线玩</span></p>
+            <h3>BlockFire <span class="alt">方块火线</span></h3>
+            <p class="desc" lang="en">Minecraft meets first-person shooter: dig, build walls and hold off waves of zombies. Bullets break blocks, and zombies can't climb more than 1.2 blocks.</p>
+            <p class="desc" lang="zh">我的世界 × 第一人称射击：挖方块、搭工事、守住一波波僵尸。子弹能打碎方块，僵尸爬不上 1.2 格以上的落差。</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 05 GAMES ================= -->
+  <section class="block" id="games">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="sec-num">05</p>
+        <h2><span lang="en">Games you can play right now</span><span lang="zh">点开就能玩的小游戏</span></h2>
+        <p class="sec-sub"><span lang="en">Each one runs in the browser. Nothing to install.</span><span lang="zh">都在浏览器里运行，不用安装。</span></p>
+      </header>
+      <div class="games">
+        <a class="card game" href="https://oldcircle.github.io/Xiangqi/">
+          <div class="img"><img src="assets/img/games/xiangqi.webp" width="640" height="400" loading="lazy" alt=""></div>
+          <div class="cap"><h4><span lang="en">Xiangqi</span><span lang="zh">中国象棋</span><span class="play">PLAY ↗</span></h4><p lang="en">Chinese chess against an AI.</p><p lang="zh">和 AI 下中国象棋。</p></div>
+        </a>
+        <a class="card game" href="https://oldcircle.github.io/Gomoku/">
+          <div class="img"><img src="assets/img/games/gomoku.webp" width="640" height="400" loading="lazy" alt=""></div>
+          <div class="cap"><h4><span lang="en">Zen Gomoku</span><span lang="zh">禅意五子棋</span><span class="play">PLAY ↗</span></h4><p lang="en">Five in a row against an AI.</p><p lang="zh">和 AI 下五子棋。</p></div>
+        </a>
+        <a class="card game" href="https://oldcircle.github.io/JokerPoker/">
+          <div class="img"><img src="assets/img/games/jokerpoker.webp" width="640" height="400" loading="lazy" alt=""></div>
+          <div class="cap"><h4><span lang="en">Joker Poker</span><span lang="zh">小丑牌</span><span class="play">PLAY ↗</span></h4><p lang="en">A Balatro-style poker roguelike.</p><p lang="zh">Balatro 风格的扑克肉鸽。</p></div>
+        </a>
+        <a class="card game" href="https://oldcircle.github.io/SurvivorRoyale/">
+          <div class="img"><img src="assets/img/games/survivorroyale.webp" width="640" height="400" loading="lazy" alt=""></div>
+          <div class="cap"><h4><span lang="en">Survivor Royale</span><span lang="zh">幸存者大逃杀</span><span class="play">PLAY ↗</span></h4><p lang="en">Pick a class. Survive, hunt, evolve.</p><p lang="zh">选个职业：生存、猎杀、进化。</p></div>
+        </a>
+        <a class="card game" href="https://oldcircle.github.io/NeonSurvivor/">
+          <div class="img"><img src="assets/img/games/neonsurvivor.webp" width="640" height="400" loading="lazy" alt=""></div>
+          <div class="cap"><h4><span lang="en">Neon Survivor</span><span lang="zh">霓虹幸存者</span><span class="play">PLAY ↗</span></h4><p lang="en">Twin-stick zombie shooter.</p><p lang="zh">双摇杆打僵尸。</p></div>
+        </a>
+        <a class="card game" href="https://oldcircle.github.io/Alpine-Escape/">
+          <div class="img"><img src="assets/img/games/alpine-escape.webp" width="640" height="400" loading="lazy" alt=""></div>
+          <div class="cap"><h4><span lang="en">Alpine Escape</span><span lang="zh">滑雪大冒险</span><span class="play">PLAY ↗</span></h4><p lang="en">An endless ski run. Backflips for speed.</p><p lang="zh">无尽滑雪，后空翻能加速。</p></div>
+        </a>
+        <a class="card game" href="https://oldcircle.github.io/Holiday-Memories-3D/">
+          <div class="img"><img src="assets/img/games/holiday-memories-3d.webp" width="640" height="400" loading="lazy" alt=""></div>
+          <div class="cap"><h4><span lang="en">Holiday Memories</span><span lang="zh">照片圣诞树</span><span class="play">OPEN ↗</span></h4><p lang="en">Your photos, stacked into a 3D Christmas tree.</p><p lang="zh">把照片堆成一棵 3D 圣诞树。</p></div>
+        </a>
+        <a class="card game" href="https://oldcircle.github.io/Gradient-Puzzle/">
+          <div class="img"><img src="assets/img/games/gradient-puzzle.webp" width="640" height="400" loading="lazy" alt=""></div>
+          <div class="cap"><h4><span lang="en">Lumina</span><span lang="zh">光韵</span><span class="play">PLAY ↗</span></h4><p lang="en">Put the colour gradient back in order.</p><p lang="zh">把打乱的颜色渐变排回去。</p></div>
+        </a>
+      </div>
+      <div class="links"><a class="more" href="https://github.com/Oldcircle?tab=repositories"><span lang="en">More games on GitHub</span><span lang="zh">更多游戏在 GitHub</span> ↗</a></div>
+    </div>
+  </section>
+
+  <!-- ================= 06 CONTRIBUTIONS ================= -->
+  <section class="block" id="upstream">
+    <div class="wrap">
+      <header class="sec-head">
+        <p class="sec-num">06</p>
+        <h2><span lang="en">Upstream</span><span lang="zh">上游贡献</span></h2>
+        <p class="sec-sub"><span lang="en">Pull requests merged into other people's projects.</span><span lang="zh">合并进别人项目里的 PR。</span></p>
+      </header>
+      <div class="contribs">
+        <a class="contrib" href="https://github.com/moeru-ai/airi/pull/1333">
+          <span class="repo">moeru-ai/airi</span>
+          <span class="title">fix(telegram-bot): fix velin rendering, action loop, and LLM compatibility</span>
+          <span class="merged">#1333 · <span lang="en">merged</span><span lang="zh">已合并</span></span>
+        </a>
+        <a class="contrib" href="https://github.com/lbjlaq/Antigravity-Manager/pull/2286">
+          <span class="repo">lbjlaq/Antigravity-Manager</span>
+          <span class="title">fix(proxy): dynamic pro model fallback with account-aware remapping</span>
+          <span class="merged">#2286 · <span lang="en">merged</span><span lang="zh">已合并</span></span>
+        </a>
+      </div>
+
+      <div class="older">
+        <p class="older-title"><span lang="en">Earlier projects</span><span lang="zh">更早的项目</span></p>
+        <a href="https://github.com/Oldcircle/storyforge"><h4>StoryForge <span class="arrow">↗</span></h4><p lang="en">One sentence in, one comic or short-drama episode out.</p><p lang="zh">输入一句话，生成一集漫画或短剧。</p></a>
+        <a href="https://github.com/Oldcircle/ChromaCheckAI"><h4>ChromaCheck AI <span class="arrow">↗</span></h4><p lang="en">Colour palettes from a description, with Gemini, DeepSeek or OpenAI.</p><p lang="zh">用一句描述生成配色，支持 Gemini、DeepSeek、OpenAI。</p></a>
+        <a href="https://github.com/Oldcircle/paper-tl"><h4>paper-tl <span class="arrow">↗</span></h4><p lang="en">Upload a paper PDF, read a Chinese translation laid out for a phone.</p><p lang="zh">上传论文 PDF，得到适合手机阅读的中文译文。</p></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <a class="brand" href="#top" aria-label="Back to top">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><use href="#enso"/></svg>
+      <span class="brand-name"><span lang="en">Yuan Bo</span><span lang="zh">袁博</span></span>
+    </a>
+    <nav class="foot-links" aria-label="Elsewhere">
+      <a href="https://github.com/Oldcircle">GitHub</a>
+      <a href="https://arxiv.org/abs/2603.20017">arXiv</a>
+      <a href="https://apps.apple.com/developer/id1873213157">App Store</a>
+    </nav>
+    <p class="fine"><span lang="en">© 2026 Yuan Bo. Hand-written HTML, no framework.</span><span lang="zh">© 2026 袁博。手写 HTML，没用框架。</span></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function isDark() {
+    var t = root.getAttribute("data-theme");
+    return t ? t === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-action], [data-copy]");
+    if (!btn) return;
+    if (btn.dataset.action === "lang") {
+      var next = root.getAttribute("data-lang") === "zh" ? "en" : "zh";
+      root.setAttribute("data-lang", next);
+      root.lang = next === "zh" ? "zh-CN" : "en";
+      document.title = next === "zh" ? "袁博 · Oldcircle" : "Yuan Bo · Oldcircle";
+      store("lang", next);
+      syncVideos();
+    } else if (btn.dataset.action === "theme") {
+      var t = isDark() ? "light" : "dark";
+      root.setAttribute("data-theme", t);
+      store("theme", t);
+    } else if (btn.dataset.copy) {
+      var text = btn.dataset.copy;
+      var done = function () {
+        var old = btn.innerHTML;
+        btn.innerHTML = root.getAttribute("data-lang") === "zh" ? "已复制" : "Copied";
+        setTimeout(function () { btn.innerHTML = old; }, 1400);
+      };
+      var fallback = function () {
+        var ta = document.createElement("textarea");
+        ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+        document.body.appendChild(ta); ta.select();
+        try { if (document.execCommand("copy")) done(); } catch (e) {}
+        document.body.removeChild(ta);
+      };
+      if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback);
+      else fallback();
+    }
+  });
+
+  if (root.getAttribute("data-lang") === "zh") document.title = "袁博 · Oldcircle";
+
+  var bar = document.getElementById("topbar");
+  window.addEventListener("scroll", function () { bar.classList.toggle("scrolled", window.scrollY > 8); }, { passive: true });
+
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // geo-sleuth stepper: advances while on screen, pauses on hover or focus
+  document.querySelectorAll("[data-stepper]").forEach(function (el) {
+    var imgs = el.querySelectorAll(".stage img"), tabs = el.querySelectorAll(".steps button"), caps = el.querySelectorAll(".step-caps p");
+    var i = 0, timer = null, visible = false, hover = false, ms = 3600;
+    el.style.setProperty("--step-ms", ms + "ms");
+    function show(n) {
+      i = (n + imgs.length) % imgs.length;
+      imgs.forEach(function (im, k) { im.classList.toggle("on", k === i); });
+      caps.forEach(function (c, k) { c.classList.toggle("on", k === i); });
+      tabs.forEach(function (b, k) { b.setAttribute("aria-selected", k === i ? "true" : "false"); });
+    }
+    function tick() { clearTimeout(timer); if (visible && !hover && !reduce) timer = setTimeout(function () { show(i + 1); tick(); }, ms); }
+    function setPaused() { el.classList.toggle("paused", hover || !visible || reduce); }
+    tabs.forEach(function (b, k) { b.addEventListener("click", function () { show(k); tick(); }); });
+    el.addEventListener("mouseenter", function () { hover = true; setPaused(); tick(); });
+    el.addEventListener("mouseleave", function () { hover = false; setPaused(); show(i); restartBar(); tick(); });
+    function restartBar() { var b = tabs[i]; b.setAttribute("aria-selected", "false"); void b.offsetWidth; b.setAttribute("aria-selected", "true"); }
+    new IntersectionObserver(function (es) { visible = es[0].isIntersecting; setPaused(); tick(); }, { threshold: 0.35 }).observe(el);
+  });
+
+  // videos play only while visible, and only the one for the current language
+  var vids = Array.prototype.slice.call(document.querySelectorAll("video[data-autoplay]"));
+  var onScreen = new Set();
+  function syncVideos() {
+    vids.forEach(function (v) {
+      var want = !reduce && onScreen.has(v) && v.offsetParent !== null;
+      if (want) { if (v.preload === "none") v.preload = "auto"; var p = v.play(); if (p) p.catch(function () {}); }
+      else v.pause();
+    });
+  }
+  if (reduce) vids.forEach(function (v) { v.controls = true; });
+  var vo = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) onScreen.add(e.target); else onScreen.delete(e.target); });
+    syncVideos();
+  }, { threshold: 0.25 });
+  vids.forEach(function (v) { vo.observe(v); });
+
+  // live star counts, cached for an hour; small numbers stay hidden
+  var repos = {};
+  document.querySelectorAll("[data-stars]").forEach(function (el) { repos[el.dataset.stars] = 1; });
+  function paint(name, n) {
+    document.querySelectorAll('[data-stars="' + name + '"]').forEach(function (el) { el.textContent = n.toLocaleString("en-US"); });
+    document.querySelectorAll('[data-stars-wrap="' + name + '"]').forEach(function (el) { el.hidden = n < 10; });
+  }
+  Object.keys(repos).forEach(function (name) {
+    var key = "stars:" + name, cached;
+    try { cached = JSON.parse(localStorage.getItem(key) || "null"); } catch (e) {}
+    if (cached && Date.now() - cached.t < 3600e3) return paint(name, cached.n);
+    fetch("https://api.github.com/repos/Oldcircle/" + name)
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (d) {
+        if (!d || typeof d.stargazers_count !== "number") return;
+        paint(name, d.stargazers_count);
+        store(key, JSON.stringify({ n: d.stargazers_count, t: Date.now() }));
+      })
+      .catch(function () {});
+  });
+})();
+</script>
 </body>
 </html>
